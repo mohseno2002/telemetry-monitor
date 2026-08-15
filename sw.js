@@ -1,8 +1,8 @@
 /* مِرصد التليمترى — service worker */
-var VERSION = "1.01";
+var VERSION = "1.02";
 var CACHE = "mwri-telemetry-monitor-v" + VERSION;
 var ASSETS = ["./", "./index.html", "./manifest.webmanifest", "./favicon.ico",
-  "./icons/icon-192x192.png", "./icons/icon-512x512.png", "./icons/apple-touch-icon.png"];
+  "./icon-192.png", "./icon-512.png", "./apple-touch-icon.png"];
 
 self.addEventListener("install", function (e) {
   self.skipWaiting();
