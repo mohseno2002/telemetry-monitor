@@ -1,5 +1,5 @@
 /* مِرصد التليمترى — service worker */
-var VERSION = "2.03";
+var VERSION = "3.00";
 var CACHE = "mwri-telemetry-monitor-v" + VERSION;
 var ASSETS = ["./", "./index.html", "./manifest.webmanifest", "./favicon.ico",
   "./icon-192.png", "./icon-512.png", "./apple-touch-icon.png"];
