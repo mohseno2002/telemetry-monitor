@@ -170,7 +170,7 @@ shalouf|محطة الشلوفة|18|0.23:3.602:8.81,1.23:3.553:9.09,2.23:3.638:8.
     <div class="nav-foot">
       <span id="dot" style="width:8px;height:8px;border-radius:50%;background:var(--muted)"></span>
       <span id="constate">جارٍ الاتصال…</span>
-      <small id="verlbl">build 2.00</small>
+      <small id="verlbl">build 2.01</small>
     </div>
   </aside>
   <main class="main">
@@ -187,7 +187,7 @@ shalouf|محطة الشلوفة|18|0.23:3.602:8.81,1.23:3.553:9.09,2.23:3.638:8.
 </div>
 
 <script>
-var BUILD="2.00";
+var BUILD="2.01";
 var FB="https://ismailia-64500-default-rtdb.europe-west1.firebasedatabase.app";
 var APPID="telemetry-monitor";
 var BRIDGE="telemetry-bridge";
@@ -345,6 +345,63 @@ function loadLive(){
   }).catch(function(e){LIVE.loading=false;LIVE.err=e.message;
     setConn("bad","تعذّر الاتصال: "+e.message);});
 }
+/* ---- دمج القراءات الحديثة من القاعدة داخل الأرشيف المضمّن ----
+   الأرشيف داخل الملف ثابت عند تاريخ البناء؛ هذه الدالة تمدّه بما كتبه
+   الجالب بعد ذلك، فتظهر أحدث الأيام فى لوحتَى الترعة والنقطة. */
+var MERGED={added:0,newest:null,err:null};
+function putRow(site,di,h,up,dn){
+  if(di<0||isNaN(di)||isNaN(h))return false;
+  for(var i=site.rows.length-1;i>=0;i--){
+    var r=site.rows[i];
+    if(r.di===di&&r.h===h){r.up=up;r.dn=dn;return false;}
+    if(r.di<di)break;
+  }
+  site.rows.push({di:di,h:h,up:up,dn:dn});
+  if(di>MAXDI)MAXDI=di;
+  return true;
+}
+function sortRows(){
+  SITES.forEach(function(s){s.rows.sort(function(a,b){return (a.di-b.di)||(a.h-b.h);});});
+}
+function mergeLatest(){
+  MERGED={added:0,newest:null,err:null};
+  var jobs=[
+    fbGet("apps/"+BRIDGE+"/live/wl").catch(function(){return null;}),
+    fbGet("apps/"+BRIDGE+"/archive").catch(function(){return null;})
+  ];
+  return Promise.all(jobs).then(function(res){
+    var wl=res[0],arc=res[1],k,sid,site,di;
+    if(wl&&wl.sites&&wl.date){
+      di=diOf(wl.date);
+      for(sid in wl.sites){
+        site=BYID[sid];if(!site)continue;
+        var v=wl.sites[sid];
+        var hh=(v.hour===null||v.hour===undefined)?null:Number(v.hour);
+        if(hh===null||isNaN(hh))continue;
+        if(putRow(site,di,hh,v.up===undefined?null:v.up,v.dn===undefined?null:v.dn))MERGED.added++;
+      }
+    }
+    if(arc){
+      for(sid in arc){
+        site=BYID[sid];if(!site)continue;
+        var byDate=arc[sid];
+        for(var dstr in byDate){
+          var dd=diOf(dstr);
+          var hours=byDate[dstr];
+          for(var hk in hours){
+            var hn=parseInt(String(hk).replace(/[^0-9]/g,""),10);
+            var cell=hours[hk]||{};
+            if(putRow(site,dd,hn,cell.up===undefined?null:cell.up,cell.dn===undefined?null:cell.dn))MERGED.added++;
+          }
+        }
+      }
+    }
+    sortRows();
+    computeStats();
+    MERGED.newest=dayStr(MAXDI);
+  }).catch(function(e){MERGED.err=e.message;});
+}
+
 /* بيانات يدخلها المستخدم: الكيلومتر والمساحة المخدومة والطول */
 var USER={km:{},canal:{}};
 function loadUser(){
@@ -968,8 +1025,10 @@ function render(){
   else if(CUR==="export")secExport(c);
   else if(CUR==="quality")secQuality(c);
   c.appendChild(el("div",{"class":"note",style:"text-align:center;margin-top:22px"},
-    ["مِرصد التليمترى — بيلد "+BUILD+" · المصدر: الإدارة المركزية للرصد المائى والتليمترى · الأرشيف المضمّن "+
-     dayStr(0)+" ← "+dayStr(MAXDI)]));
+    ["مِرصد التليمترى — بيلد "+BUILD+" · المصدر: الإدارة المركزية للرصد المائى والتليمترى · المدى المتاح "+
+     dayStr(0)+" ← "+dayStr(MAXDI)+
+     (MERGED.added?" · أُضيفت "+MERGED.added+" قراءة من القاعدة":"")+
+     (MERGED.err?" · تعذّر الدمج: "+MERGED.err:"")]));
 }
 
 /* ============ التثبيت ============ */
@@ -1001,10 +1060,12 @@ function setupInstall(){
 function boot(){
   q("verlbl").textContent="build "+BUILD;
   loadArchive();computeStats();loadUser();buildNav();go("canal");
-  loadLive().then(function(){render();
+  loadLive().then(mergeLatest).then(function(){render();
     fbPatch("registry/"+APPID,{app:APPID,name:"مِرصد التليمترى",type:"dashboard",
       version:BUILD,lastSeen:Date.now()});});
-  q("btn-refresh").onclick=function(){loadLive().then(render);};
+  q("btn-refresh").onclick=function(){
+    SEL.date=null;
+    loadLive().then(mergeLatest).then(render);};
   q("btn-print").onclick=function(){window.print();};
   setupInstall();
   if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(function(){});
