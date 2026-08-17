@@ -170,7 +170,7 @@ shalouf|محطة الشلوفة|18|0.23:3.602:8.81,1.23:3.553:9.09,2.23:3.638:8.
     <div class="nav-foot">
       <span id="dot" style="width:8px;height:8px;border-radius:50%;background:var(--muted)"></span>
       <span id="constate">جارٍ الاتصال…</span>
-      <small id="verlbl">build 2.01</small>
+      <small id="verlbl">build 2.02</small>
     </div>
   </aside>
   <main class="main">
@@ -187,7 +187,7 @@ shalouf|محطة الشلوفة|18|0.23:3.602:8.81,1.23:3.553:9.09,2.23:3.638:8.
 </div>
 
 <script>
-var BUILD="2.01";
+var BUILD="2.02";
 var FB="https://ismailia-64500-default-rtdb.europe-west1.firebasedatabase.app";
 var APPID="telemetry-monitor";
 var BRIDGE="telemetry-bridge";
@@ -563,6 +563,87 @@ function bars(items,opts){
       fill:"#8b948f"},it.label2));
   });
   var box=el("div",{"class":"chartbox"});box.appendChild(svg);return box;
+}
+
+/* ============ شريط أحدث قراءة — أول ما يُرى فى كل قسم ============ */
+function latestOf(site){
+  var best=null;
+  for(var i=site.rows.length-1;i>=0;i--){
+    var r=site.rows[i];
+    if(r.up===null&&r.dn===null)continue;
+    if(!best||r.di>best.di||(r.di===best.di&&r.h>best.h))best=r;
+    if(best&&best.di>=site.rows[site.rows.length-1].di-1)break;
+  }
+  return best;
+}
+function ageHours(di,h){
+  /* ساعة القراءة بتوقيت القاهرة (UTC+3) والأساس بتوقيت UTC */
+  var t=BASEDATE.getTime()+di*86400000+(h-3)*3600000;
+  var a=(Date.now()-t)/3600000;
+  return a<0?0:a;
+}
+function ageTxt(hh){
+  if(hh<1)return "أقل من ساعة";
+  if(hh<48)return "منذ "+Math.round(hh)+" ساعة";
+  return "منذ "+Math.round(hh/24)+" يوماً";
+}
+function ageCls(hh){return hh<=6?"stamp":(hh<=24?"stamp warn":"stamp bad");}
+function heroLatest(){
+  var snap=[],newest=null;
+  SITES.forEach(function(s){
+    var r=latestOf(s);
+    if(!r)return;
+    snap.push({s:s,r:r});
+    if(!newest||r.di>newest.di||(r.di===newest.di&&r.h>newest.h))newest=r;
+  });
+  if(!newest)return el("div",{"class":"panel"},[emptyState("لا توجد قراءات","الأرشيف فارغ.")]);
+  var hh=ageHours(newest.di,newest.h);
+  var sameHour=snap.filter(function(x){return x.r.di===newest.di&&x.r.h===newest.h;});
+  var flagged=snap.filter(function(x){return isBad(x.r.up)||isBad(x.r.dn);});
+  var stale=snap.filter(function(x){return ageHours(x.r.di,x.r.h)>24;});
+  var src=(LIVE.wl&&LIVE.wl.source)?LIVE.wl.source:null;
+
+  var head=el("div",{"class":"panel",style:"margin-top:0;border-color:#c8dbdd;"+
+    "background:linear-gradient(135deg,#eef5f7,#f7f9f4)"},[
+    el("span",{"class":"eyebrow"},["أحدث قراءة"]),
+    el("div",{"class":"rowflex",style:"justify-content:space-between;align-items:flex-start"},[
+      el("div",{},[
+        el("div",{style:"font-family:var(--mono);font-size:27px;font-weight:700;line-height:1.15;color:var(--lake-deep)"},
+          [dayStr(newest.di)+" — الساعة "+newest.h+":00"]),
+        el("div",{style:"margin-top:6px;font-size:11.5px;color:var(--muted)"},
+          [sameHour.length+" موقعاً سجّل فى هذه الساعة من "+snap.length+
+           (src?" · المصدر: "+(src==="email"?"رسالة التليمترى":src):"")])]),
+      el("span",{"class":ageCls(hh)},[ageTxt(hh)])
+    ])]);
+
+  var g=el("div",{"class":"grid g4",style:"margin-top:14px"},[
+    kpi("◷",hh<=6?"green":(hh<=24?"sand":"bad"),"عمر القراءة",ageTxt(hh).replace("منذ ",""),"",
+      "بتوقيت القراءة لا وقت الجلب"),
+    kpi("◉","","مواقع سجّلت الآن",String(sameHour.length)+" / "+String(snap.length),"موقع",
+      sameHour.length<snap.length?(snap.length-sameHour.length)+" موقعاً آخر قراءته أقدم":"كل المواقع محدَّثة"),
+    kpi("⚠",flagged.length?"bad":"green","آخر قراءة براية",String(flagged.length),"موقع",
+      flagged.length?flagged.map(function(x){return x.s.name;}).slice(0,2).join(" · "):"لا شىء"),
+    kpi("⌛",stale.length?"bad":"green","مواقع صامتة",String(stale.length),"موقع","لم تسجّل منذ أكثر من ٢٤ ساعة")
+  ]);
+  head.appendChild(g);
+
+  snap.sort(function(a,b){
+    var d=(b.r.di-a.r.di)||(b.r.h-a.r.h);
+    return d||a.s.name.localeCompare(b.s.name,"ar");});
+  var rows=snap.map(function(x){
+    var a=ageHours(x.r.di,x.r.h);
+    return {bad:isBad(x.r.up)||isBad(x.r.dn)||a>24,
+      cells:[x.s.name,x.s.canal,dayStr(x.r.di)+" · "+x.r.h+":00",
+        isBad(x.r.up)?"راية":(x.r.up===null?"—":fx(x.r.up,3)),
+        (x.r.dn===null)?"—":(isBad(x.r.dn)?"راية":fx(x.r.dn,3)),
+        (x.r.up!==null&&x.r.dn!==null&&!isBad(x.r.up)&&!isBad(x.r.dn))?fx(x.r.up-x.r.dn,3):"—",
+        ageTxt(a)]};});
+  head.appendChild(el("div",{style:"margin-top:14px"},[
+    el("h2",{style:"font-size:13px"},["تفصيل آخر قراءة لكل موقع"]),
+    tbl(["الموقع","الترعة","توقيت القراءة","الأمام (م)","الخلف (م)","الفرق (م)","العمر"],rows)]));
+  head.appendChild(el("div",{"class":"note"},
+    ["الترتيب من الأحدث للأقدم. الصف الأحمر إمّا قراءته راية أو مضى عليها أكثر من ٢٤ ساعة."]));
+  return head;
 }
 
 /* ============ الأقسام ============ */
@@ -1018,6 +1099,7 @@ function secQuality(c){
 function render(){
   var c=q("content");c.innerHTML="";
   c.appendChild(mobileNav());
+  c.appendChild(heroLatest());
   if(CUR==="canal")secCanal(c);
   else if(CUR==="point")secPoint(c);
   else if(CUR==="alerts")secAlerts(c);
