@@ -170,7 +170,7 @@ shalouf|محطة الشلوفة|18|0.23:3.602:8.81,1.23:3.553:9.09,2.23:3.638:8.
     <div class="nav-foot">
       <span id="dot" style="width:8px;height:8px;border-radius:50%;background:var(--muted)"></span>
       <span id="constate">جارٍ الاتصال…</span>
-      <small id="verlbl">build 2.02</small>
+      <small id="verlbl">build 2.03</small>
     </div>
   </aside>
   <main class="main">
@@ -187,7 +187,7 @@ shalouf|محطة الشلوفة|18|0.23:3.602:8.81,1.23:3.553:9.09,2.23:3.638:8.
 </div>
 
 <script>
-var BUILD="2.02";
+var BUILD="2.03";
 var FB="https://ismailia-64500-default-rtdb.europe-west1.firebasedatabase.app";
 var APPID="telemetry-monitor";
 var BRIDGE="telemetry-bridge";
@@ -209,10 +209,33 @@ function dayStr(di){var d=new Date(BASEDATE.getTime()+di*86400000);
   var m=d.getUTCMonth()+1,dd=d.getUTCDate();
   return d.getUTCFullYear()+"-"+(m<10?"0":"")+m+"-"+(dd<10?"0":"")+dd;}
 function diOf(s){return Math.round((Date.parse(s+"T00:00:00Z")-BASEDATE.getTime())/86400000);}
-function isBad(v){return v!==null&&(SENT.indexOf(v)>-1||v===FAULT||v<0);}
-function flagOf(v){if(v===null)return null;
+/* توقيت مصر: +٣ فى التوقيت الصيفى (آخر جمعة أبريل ← آخر خميس أكتوبر) و+٢ فيما عداه */
+function lastDow(y,m,dow){var d=new Date(Date.UTC(y,m+1,0));
+  while(d.getUTCDay()!==dow)d.setUTCDate(d.getUTCDate()-1);return d;}
+function cairoOffset(ms){
+  var d=new Date(ms),y=d.getUTCFullYear();
+  var start=lastDow(y,3,5), end=lastDow(y,9,4);   /* أبريل الجمعة · أكتوبر الخميس */
+  return (d>=start&&d<end)?3:2;
+}
+/* الراية: 777 و888 والسالب دائماً. أمّا 5.00 فليست راية إلا حين تتزامن
+   فى عدة مواقع (عطل منظومى) أو تقع خارج النطاق المرصود للمحطة. */
+var FAULT_STAMPS={};
+function keeps5(site,r){
+  if(FAULT_STAMPS[r.di+"."+r.h])return false;
+  var pr=site&&site.plaus;
+  if(pr&&(FAULT<pr.lo||FAULT>pr.hi))return false;
+  return true;
+}
+function isBad(v,site,r){
+  if(v===null||v===undefined)return false;
+  if(SENT.indexOf(v)>-1||v<0)return true;
+  if(v===FAULT)return !(site&&r&&keeps5(site,r));
+  return false;
+}
+function flagOf(v,site,r){if(v===null||v===undefined)return null;
   if(v===SENT[0])return "راية 777";if(v===SENT[1])return "راية 888";
-  if(v===FAULT)return "قيمة افتراضية 5.00";if(v<0)return "قيمة سالبة";return null;}
+  if(v===FAULT)return (site&&r&&keeps5(site,r))?null:"قيمة افتراضية 5.00";
+  if(v<0)return "قيمة سالبة";return null;}
 function mean(a){if(!a.length)return null;var s=0;for(var i=0;i<a.length;i++)s+=a[i];return s/a.length;}
 function median(a){if(!a.length)return null;var b=a.slice().sort(function(x,y){return x-y;});
   var m=Math.floor(b.length/2);return b.length%2?b[m]:(b[m-1]+b[m])/2;}
@@ -257,7 +280,7 @@ function daily(site,fromDi,toDi){
   var by={};
   site.rows.forEach(function(r){
     if(fromDi!==undefined&&(r.di<fromDi||r.di>toDi))return;
-    if(r.up===null||isBad(r.up)||r.up===0)return;
+    if(r.up===null||isBad(r.up,site,r)||r.up===0)return;
     (by[r.di]=by[r.di]||[]).push(r.up);
   });
   var out=[];
@@ -268,11 +291,11 @@ function daily(site,fromDi,toDi){
 function statsOf(site){
   var ok=0,f={},vals=[],last=null,zero=0;
   site.rows.forEach(function(r){
-    var fl=flagOf(r.up)||flagOf(r.dn);
+    var fl=flagOf(r.up,site,r)||flagOf(r.dn,site,r);
     if(fl)f[fl]=(f[fl]||0)+1;
     else if(r.up===0)zero++;
     else ok++;
-    if(r.up!==null&&!isBad(r.up)&&r.up>0)vals.push(r.up);
+    if(r.up!==null&&!isBad(r.up,site,r)&&r.up>0)vals.push(r.up);
     if(!last||r.di>last.di||(r.di===last.di&&r.h>last.h))last=r;
   });
   return {n:site.rows.length,ok:ok,flags:f,zero:zero,last:last,
@@ -282,9 +305,33 @@ function statsOf(site){
 }
 function computeStats(){SITES.forEach(function(s){STATS[s.id]=statsOf(s);});}
 
-/* الشواذ: انحراف مطلق متوسط عن الوسيط (MAD) على المتوسط اليومى */
+/* يُستدعى قبل أى حساب: يحدّد لحظات العطل المنظومى (٥٫٠٠ فى ٣ مواقع فأكثر)
+   والنطاق المرصود لكل محطة من القراءات الخالية من الرايات القاطعة */
+function computeFaultContext(){
+  var cnt={};
+  SITES.forEach(function(s){s.rows.forEach(function(r){
+    if(r.up===FAULT||r.dn===FAULT)cnt[r.di+"."+r.h]=(cnt[r.di+"."+r.h]||0)+1;});});
+  FAULT_STAMPS={};
+  for(var k in cnt)if(cnt[k]>=3)FAULT_STAMPS[k]=cnt[k];
+  SITES.forEach(function(s){
+    var v=[];
+    s.rows.forEach(function(r){
+      if(r.up===null||r.up===FAULT)return;
+      if(SENT.indexOf(r.up)>-1||r.up<0||r.up===0)return;
+      v.push(r.up);});
+    if(v.length<10){s.plaus=null;return;}
+    v.sort(function(a,b){return a-b;});
+    var lo=v[Math.floor(v.length*0.02)],hi=v[Math.floor(v.length*0.98)];
+    var pad=Math.max(0.5,(hi-lo)*0.5);
+    s.plaus={lo:lo-pad,hi:hi+pad};
+  });
+}
+
+/* بداية التسجيل الساعى — قبلها قراءة واحدة يومياً، وخلط الفترتين يفسد الإحصاء */
+var HOURLY_FROM=diOf("2026-07-15");
+/* الشواذ: انحراف مطلق متوسط عن الوسيط (MAD) على المتوسط اليومى، داخل الفترة الساعية وحدها */
 function anomalies(site){
-  var d=daily(site),v=d.map(function(x){return x.v;});
+  var d=daily(site,HOURLY_FROM,1e9),v=d.map(function(x){return x.v;});
   if(v.length<7)return {rows:d,list:[],lo:null,hi:null};
   var med=median(v);
   var dev=v.map(function(x){return Math.abs(x-med);});
@@ -312,10 +359,25 @@ function forecast(site,days,ahead){
   if(!den)return null;
   var b=(n*sxy-sx*sy)/den,a=(sy-b*sx)/n;
   var res=seg.map(function(p,i){return p.v-(a+b*i);});
-  var sd=Math.sqrt(mean(res.map(function(r){return r*r;}))||0);
+  var sse=0;res.forEach(function(r){sse+=r*r;});
+  var dof=Math.max(1,n-2);
+  var se=Math.sqrt(sse/dof);                       /* الخطأ المعيارى للانحدار */
+  var xbar=sx/n,sxx2=0;
+  seg.forEach(function(p,i){sxx2+=(i-xbar)*(i-xbar);});
+  /* ارتباط البواقى من الرتبة الأولى — يوسّع النطاق حين تكون البواقى متسلسلة */
+  var num=0,den2=0;
+  for(var j=1;j<n;j++)num+=res[j]*res[j-1];
+  res.forEach(function(r){den2+=r*r;});
+  var rho=den2>0?Math.max(0,Math.min(0.95,num/den2)):0;
+  var infl=Math.sqrt((1+rho)/(1-rho));             /* معامل توسيع للارتباط الزمنى */
   var out=[];
-  for(var k=1;k<=ahead;k++)out.push({di:seg[seg.length-1].di+k,v:a+b*(n-1+k),sd:sd});
-  return {hist:seg,pred:out,slope:b,sd:sd};
+  for(var k=1;k<=ahead;k++){
+    var xk=n-1+k;
+    var lev=sxx2>0?((xk-xbar)*(xk-xbar))/sxx2:0;
+    var sdk=se*Math.sqrt(1+1/n+lev)*infl;          /* فاصل تنبؤ لا فاصل ثقة */
+    out.push({di:seg[seg.length-1].di+k,v:a+b*xk,sd:sdk});
+  }
+  return {hist:seg,pred:out,slope:b,sd:se,rho:rho,infl:infl};
 }
 
 /* ============ Firebase ============ */
@@ -397,6 +459,7 @@ function mergeLatest(){
       }
     }
     sortRows();
+    computeFaultContext();
     computeStats();
     MERGED.newest=dayStr(MAXDI);
   }).catch(function(e){MERGED.err=e.message;});
@@ -407,6 +470,20 @@ var USER={km:{},canal:{}};
 function loadUser(){
   try{var s=localStorage.getItem("mwri.tele.user");if(s)USER=JSON.parse(s);}catch(e){}
   USER.km=USER.km||{};USER.canal=USER.canal||{};
+}
+/* المزامنة بين الأجهزة: ما فى القاعدة يُدمج مع المحلى، والمحلى أولى عند التعارض
+   لأنه آخر ما كتبه المستخدم على هذا الجهاز */
+function loadUserRemote(){
+  return fbGet("apps/"+APPID+"/data/user").then(function(v){
+    if(!v)return;
+    var rk=v.km||{},k;
+    for(k in rk){
+      if(USER.km[k]===undefined||USER.km[k]===null||USER.km[k]==="")USER.km[k]=rk[k];
+    }
+    var rc=v.canal||{};
+    for(k in rc)if(USER.canal[k]===undefined)USER.canal[k]=rc[k];
+    try{localStorage.setItem("mwri.tele.user",JSON.stringify(USER));}catch(e){}
+  }).catch(function(){});
 }
 function saveUser(){
   try{localStorage.setItem("mwri.tele.user",JSON.stringify(USER));}catch(e){}
@@ -543,20 +620,27 @@ function bars(items,opts){
   opts=opts||{};
   var W=920,H=opts.h||250,padL=54,padR=16,padT=14,padB=52;
   if(!items.length)return emptyState("لا توجد بيانات","");
-  var mx=Math.max.apply(null,items.map(function(i){return i.v;}));
-  if(mx<=0)mx=1;
+  var vs=items.map(function(i){return i.v;});
+  var mx=Math.max.apply(null,vs),mn=Math.min.apply(null,vs);
+  if(mn>0)mn=0; if(mx<0)mx=0;
+  if(mx===mn){mx=mn+1;}
+  var plotH=H-padT-padB;
+  function Y(v){return padT+plotH*(1-(v-mn)/(mx-mn));}
   var svg=svgNS("svg",{viewBox:"0 0 "+W+" "+H,"class":"chart",preserveAspectRatio:"none"});
   var i,gv,gy;
-  for(i=0;i<=4;i++){gv=mx*i/4;gy=padT+(H-padT-padB)*(1-i/4);
-    svg.appendChild(svgNS("line",{x1:padL,x2:W-padR,y1:gy,y2:gy,stroke:"#e6e0d0","stroke-width":1}));
+  for(i=0;i<=4;i++){gv=mn+(mx-mn)*i/4;gy=Y(gv);
+    svg.appendChild(svgNS("line",{x1:padL,x2:W-padR,y1:gy,y2:gy,
+      stroke:Math.abs(gv)<1e-9?"#c9c1ad":"#e6e0d0","stroke-width":Math.abs(gv)<1e-9?1.5:1}));
     svg.appendChild(svgNS("text",{x:padL-8,y:gy+4,"text-anchor":"end","font-size":11,fill:"#66736f",
       "font-family":"IBM Plex Mono"},gv.toFixed(opts.yd===undefined?1:opts.yd)));}
+  var zeroY=Y(0);
+  svg.appendChild(svgNS("line",{x1:padL,x2:W-padR,y1:zeroY,y2:zeroY,stroke:"#9aa39c","stroke-width":1.5}));
   var bw=(W-padL-padR)/items.length;
   items.forEach(function(it,k){
-    var h=(H-padT-padB)*(it.v/mx),x=padL+bw*k+bw*0.18,w=bw*0.64;
-    svg.appendChild(svgNS("rect",{x:x,y:padT+(H-padT-padB)-h,width:w,height:Math.max(1,h),
-      fill:it.color||"#9fc0d4",rx:3}));
-    svg.appendChild(svgNS("text",{x:x+w/2,y:padT+(H-padT-padB)-h-5,"text-anchor":"middle",
+    var yv=Y(it.v),x=padL+bw*k+bw*0.18,w=bw*0.64;
+    var top=Math.min(yv,zeroY),hh=Math.max(1,Math.abs(zeroY-yv));
+    svg.appendChild(svgNS("rect",{x:x,y:top,width:w,height:hh,fill:it.color||"#9fc0d4",rx:3}));
+    svg.appendChild(svgNS("text",{x:x+w/2,y:(it.v>=0?top-5:top+hh+12),"text-anchor":"middle",
       "font-size":9.5,fill:"#4c5854","font-family":"IBM Plex Mono"},it.v.toFixed(opts.vd===undefined?1:opts.vd)));
     svg.appendChild(svgNS("text",{x:x+w/2,y:H-30,"text-anchor":"middle","font-size":9,fill:"#66736f"},it.label));
     if(it.label2)svg.appendChild(svgNS("text",{x:x+w/2,y:H-18,"text-anchor":"middle","font-size":8.5,
@@ -577,8 +661,9 @@ function latestOf(site){
   return best;
 }
 function ageHours(di,h){
-  /* ساعة القراءة بتوقيت القاهرة (UTC+3) والأساس بتوقيت UTC */
-  var t=BASEDATE.getTime()+di*86400000+(h-3)*3600000;
+  /* ساعة القراءة بتوقيت القاهرة والأساس UTC — الإزاحة تتبع التوقيت الصيفى */
+  var base=BASEDATE.getTime()+di*86400000;
+  var t=base+(h-cairoOffset(base))*3600000;
   var a=(Date.now()-t)/3600000;
   return a<0?0:a;
 }
@@ -599,7 +684,7 @@ function heroLatest(){
   if(!newest)return el("div",{"class":"panel"},[emptyState("لا توجد قراءات","الأرشيف فارغ.")]);
   var hh=ageHours(newest.di,newest.h);
   var sameHour=snap.filter(function(x){return x.r.di===newest.di&&x.r.h===newest.h;});
-  var flagged=snap.filter(function(x){return isBad(x.r.up)||isBad(x.r.dn);});
+  var flagged=snap.filter(function(x){return isBad(x.r.up,x.s,x.r)||isBad(x.r.dn,x.s,x.r);});
   var stale=snap.filter(function(x){return ageHours(x.r.di,x.r.h)>24;});
   var src=(LIVE.wl&&LIVE.wl.source)?LIVE.wl.source:null;
 
@@ -632,11 +717,12 @@ function heroLatest(){
     return d||a.s.name.localeCompare(b.s.name,"ar");});
   var rows=snap.map(function(x){
     var a=ageHours(x.r.di,x.r.h);
-    return {bad:isBad(x.r.up)||isBad(x.r.dn)||a>24,
+    var bu=isBad(x.r.up,x.s,x.r),bd=isBad(x.r.dn,x.s,x.r);
+    return {bad:bu||bd||a>24,
       cells:[x.s.name,x.s.canal,dayStr(x.r.di)+" · "+x.r.h+":00",
-        isBad(x.r.up)?"راية":(x.r.up===null?"—":fx(x.r.up,3)),
-        (x.r.dn===null)?"—":(isBad(x.r.dn)?"راية":fx(x.r.dn,3)),
-        (x.r.up!==null&&x.r.dn!==null&&!isBad(x.r.up)&&!isBad(x.r.dn))?fx(x.r.up-x.r.dn,3):"—",
+        bu?"راية":(x.r.up===null?"—":fx(x.r.up,3)),
+        (x.r.dn===null)?"—":(bd?"راية":fx(x.r.dn,3)),
+        (x.r.up!==null&&x.r.dn!==null&&!bu&&!bd)?fx(x.r.up-x.r.dn,3):"—",
         ageTxt(a)]};});
   head.appendChild(el("div",{style:"margin-top:14px"},[
     el("h2",{style:"font-size:13px"},["تفصيل آخر قراءة لكل موقع"]),
@@ -656,7 +742,7 @@ var SECTIONS=[
   {id:"quality",icon:"✓", eyebrow:"جودة المصدر", title:"سلامة البيانات"}
 ];
 var CUR="canal";
-var SEL={canal:"ترعة الإسماعيلية",point:null,date:null,days:14};
+var SEL={canal:"ترعة الإسماعيلية",point:null,date:null,hour:null,days:14};
 
 function buildNav(){
   var n=q("nav");n.innerHTML="";
@@ -721,18 +807,44 @@ function secCanal(c){
   c.appendChild(panel("بطاقة الترعة","بيانات عامة",null,[g,
     el("div",{"class":"note"},["«مدى الترقيم» هو الفارق بين أصغر وأكبر كيلومتر معروف، لا طول الترعة الفعلى — الطول لا يرد فى مصدر التليمترى."])]));
 
-  /* المخطط الطولى */
+  /* المخطط الطولى — قراءات متزامنة فى ساعة واحدة لا متوسط اليوم */
+  var hourCount={};
+  list.forEach(function(s){
+    s.rows.forEach(function(r){
+      if(r.di!==SEL.date)return;
+      if(r.up===null||isBad(r.up,s,r)||r.up<=0)return;
+      hourCount[r.h]=(hourCount[r.h]||0)+1;});});
+  var hoursAvail=Object.keys(hourCount).map(Number).sort(function(a,b){return a-b;});
+  if(SEL.hour===null||hoursAvail.indexOf(SEL.hour)<0){
+    var best=null;
+    hoursAvail.forEach(function(h){
+      if(best===null||hourCount[h]>hourCount[best]||(hourCount[h]===hourCount[best]&&h>best))best=h;});
+    SEL.hour=best;
+  }
+  var selH=el("select");
+  if(!hoursAvail.length)selH.appendChild(el("option",{value:""},["لا توجد قراءات"]));
+  hoursAvail.forEach(function(h){
+    var o=el("option",{value:String(h)},[h+":00 — "+hourCount[h]+" نقطة"]);
+    if(h===SEL.hour)o.setAttribute("selected","selected");
+    selH.appendChild(o);});
+  selH.onchange=function(){SEL.hour=parseInt(selH.value,10);render();};
+
   var prof=[];
   withKm.forEach(function(s){
-    var day=s.rows.filter(function(r){return r.di===SEL.date;});
-    var vals=day.filter(function(r){return r.up!==null&&!isBad(r.up)&&r.up>0;}).map(function(r){return r.up;});
-    var v=vals.length?mean(vals):null;
-    var flagged=day.some(function(r){return isBad(r.up);});
-    prof.push({x:kmFor(s),y:v,flag:flagged,label:s.name.slice(0,14),name:s.name,n:vals.length});
+    var cell=null,flagged=false;
+    s.rows.forEach(function(r){
+      if(r.di!==SEL.date||r.h!==SEL.hour)return;
+      if(isBad(r.up,s,r)){flagged=true;return;}
+      if(r.up!==null&&r.up>0)cell=r.up;});
+    prof.push({x:kmFor(s),y:cell,flag:flagged,label:s.name.slice(0,14),name:s.name,n:cell===null?0:1});
   });
   prof.sort(function(a,b){return a.x-b.x;});
+  var covered=prof.filter(function(p){return p.y!==null;}).length;
   var pnl=panel("المخطط الطولى","منسوب سطح الماء مقابل المسافة من المأخذ",
-    dayStr(SEL.date)+" — متوسط اليوم عند كل نقطة");
+    dayStr(SEL.date)+" الساعة "+(SEL.hour===null?"—":SEL.hour+":00")+
+    " — قراءات متزامنة، "+covered+" من "+withKm.length+" نقطة لها قراءة سليمة فى هذه الساعة");
+  pnl.appendChild(el("div",{style:"margin-top:12px;max-width:340px"},[
+    el("label",{"class":"fl"},["ساعة المقطع"]),selH]));
   if(prof.filter(function(p){return p.y!==null;}).length<2){
     pnl.appendChild(emptyState("لا يكفى لرسم مقطع طولى",
       "يلزم نقطتان على الأقل لهما كيلومتر معروف وقراءة سليمة فى هذا اليوم."));
@@ -746,10 +858,11 @@ function secCanal(c){
       var dx=pv[pv.length-1].x-pv[0].x,dy=pv[0].y-pv[pv.length-1].y;
       if(dx>0)slope=dy/dx;
     }
+    var hiP=pv[0],loP=pv[0];
+    pv.forEach(function(p){if(p.y>hiP.y)hiP=p;if(p.y<loP.y)loP=p;});
     pnl.appendChild(el("div",{"class":"grid g3",style:"margin-top:14px"},[
-      kpi("↧","","أعلى منسوب",fx(Math.max.apply(null,pv.map(function(p){return p.y;})),3),"م",pv[0].name),
-      kpi("↥","","أدنى منسوب",fx(Math.min.apply(null,pv.map(function(p){return p.y;})),3),"م",
-        pv[pv.length-1].name),
+      kpi("↧","","أعلى منسوب",fx(hiP.y,3),"م",hiP.name+" — كم "+fx(hiP.x,1)),
+      kpi("↥","","أدنى منسوب",fx(loP.y,3),"م",loP.name+" — كم "+fx(loP.x,1)),
       kpi("∠",slope&&slope<0?"sand":"","متوسط الميل",slope===null?"—":(slope*1000).toFixed(2),"م/كم ×١٠⁻³",
         slope!==null&&slope<0?"ارتفاع باتجاه المصب — راجع الكيلومترات":"انحدار طبيعى")
     ]));
@@ -778,10 +891,10 @@ function secCanal(c){
   if(pv2.length>1){
     var items=[];
     for(var i=1;i<pv2.length;i++){
+      var dvv=pv2[i-1].y-pv2[i].y;
       items.push({label:pv2[i-1].x.toFixed(0)+"←"+pv2[i].x.toFixed(0)+" كم",
         label2:(pv2[i].x-pv2[i-1].x).toFixed(1)+" كم",
-        v:Math.max(0,pv2[i-1].y-pv2[i].y),
-        color:(pv2[i-1].y-pv2[i].y)<0?"#e0b8ae":"#9fc0d4"});}
+        v:dvv,color:dvv<0?"#c98b7a":"#9fc0d4"});}
     c.appendChild(panel("الفاقد بين النقاط","هبوط المنسوب على كل قطاع",
       "قيمة سالبة تعنى ارتفاعاً باتجاه المصب — غالباً كيلومتر خاطئ أو حسّاس منحرف",[
       bars(items,{yd:2,vd:3}),
@@ -796,13 +909,13 @@ function secCanal(c){
   var rows=[];
   list.forEach(function(s){
     var day=s.rows.filter(function(r){return r.di===SEL.date;});
-    var ok=day.filter(function(r){return r.up!==null&&!isBad(r.up);});
+    var ok=day.filter(function(r){return r.up!==null&&!isBad(r.up,s,r);});
     var lastR=day.length?day[day.length-1]:null;
-    rows.push({bad:day.some(function(r){return isBad(r.up);}),
+    rows.push({bad:day.some(function(r){return isBad(r.up,s,r);}),
       cells:[s.name,DIRNAME[s.dir]||s.dir,kmFor(s)===null?"—":fx(kmFor(s),1),
         lastR?lastR.h+":00":"—",
-        lastR&&!isBad(lastR.up)?fx(lastR.up,3):(lastR?"راية":"—"),
-        lastR&&lastR.dn!==null&&!isBad(lastR.dn)?fx(lastR.dn,3):"—",
+        lastR&&!isBad(lastR.up,s,lastR)?fx(lastR.up,3):(lastR?"راية":"—"),
+        lastR&&lastR.dn!==null&&!isBad(lastR.dn,s,lastR)?fx(lastR.dn,3):"—",
         day.length,ok.length]});});
   c.appendChild(panel("نقاط الترعة","حالة كل نقطة فى اليوم المختار",null,[
     tbl(["الموقع","الإدارة","كم","آخر ساعة","الأمام (م)","الخلف (م)","قراءات","سليمة"],rows)]));
@@ -850,12 +963,12 @@ function secPoint(c){
     el("div",{"class":"grid g4",style:"margin-top:10px"},[
       field("تاريخ آخر قراءة",L?dayStr(L.di):"—"),
       field("الساعة",L?L.h+":00":"—"),
-      field("المنسوب الأمامى",L&&!isBad(L.up)?fx(L.up,3)+" م":"راية",true),
-      field("المنسوب الخلفى",L&&L.dn!==null&&!isBad(L.dn)?fx(L.dn,3)+" م":"—",true)]),
+      field("المنسوب الأمامى",L&&!isBad(L.up,site,L)?fx(L.up,3)+" م":"راية",true),
+      field("المنسوب الخلفى",L&&L.dn!==null&&!isBad(L.dn,site,L)?fx(L.dn,3)+" م":"—",true)]),
     liveRec?el("div",{"class":"rowflex",style:"margin-top:12px"},[
       stampEl(LIVE.wl.updatedAt),
       el("span",{"class":"pill lake"},["البث الحى: "+
-        (liveRec.up===null?"راية":fx(liveRec.up,3)+" م")+" الساعة "+(liveRec.hour||"—")])]):
+        (liveRec.up===null?"راية":fx(liveRec.up,3)+" م")+" الساعة "+((liveRec.hour===null||liveRec.hour===undefined)?"—":liveRec.hour+":00")])]):
       el("div",{"class":"note"},["لا توجد قراءة حية لهذه النقطة الآن — المعروض من الأرشيف المضمّن."])
   ]));
 
@@ -876,7 +989,7 @@ function secPoint(c){
 
   /* الساعى */
   var hourly=site.rows.filter(function(r){return r.di>=from;});
-  var hp=hourly.map(function(r,i){return {x:i,y:isBad(r.up)?null:r.up,flag:isBad(r.up)};});
+  var hp=hourly.map(function(r,i){var b=isBad(r.up,site,r);return {x:i,y:b?null:r.up,flag:b};});
   var hd=hourly.map(function(r){return dayStr(r.di).slice(5)+" "+r.h;});
   c.appendChild(panel("القراءات الساعية","التفصيل ساعة بساعة",
     hourly.length+" قراءة — الخط ينقطع عند الراية ولا يُوصَل",[
@@ -898,16 +1011,21 @@ function secPoint(c){
       {name:"متنبأ به",pts:ppts,color:"#b46f4b",dash:true,dots:true,bandOf:true}],
       {xtitle:"التاريخ",ytitle:"المنسوب (م)",yd:2,ticks:6,
        xfmt:function(v){return dayStr(Math.round(v)).slice(5);},
-       legendExtra:"النطاق المظلّل = ±انحراف البواقى"}));
+       legendExtra:"النطاق المظلّل = فاصل تنبؤ يتّسع كلما ابتعد اليوم"}));
     var tr=fc.slope*7;
     fp.appendChild(el("div",{"class":"grid g3",style:"margin-top:14px"},[
       kpi("→",Math.abs(tr)>0.05?"sand":"green","الاتجاه المتوقع",(tr>=0?"+":"")+fx(tr,3),"م / ٧ أيام",
         Math.abs(tr)<0.02?"مستقر عملياً":(tr>0?"ارتفاع":"انخفاض")),
-      kpi("±","","عدم اليقين","±"+fx(fc.sd*1.96,3),"م","نطاق ٩٥٪ من تشتت البواقى"),
+      kpi("±","","عدم اليقين اليوم السابع","±"+fx(fc.pred[fc.pred.length-1].sd*1.96,3),"م",
+        "فاصل تنبؤ ٩٥٪ يشمل تشتت البواقى وعدم يقين الميل"+
+        (fc.rho>0.2?" وارتباطها الزمنى ("+fx(fc.rho,2)+")":"")),
       kpi("◷","","أساس التنبؤ",String(fc.hist.length),"يوم","المتوسطات اليومية الأخيرة")]));
-    fp.appendChild(tbl(["اليوم","المنسوب المتوقع (م)","الحد الأدنى","الحد الأقصى"],
+    fp.appendChild(tbl(["اليوم","المنسوب المتوقع (م)","الحد الأدنى","الحد الأقصى","± (م)"],
       fc.pred.map(function(p){return {cells:[dayStr(p.di),fx(p.v,3),
-        fx(p.v-1.96*p.sd,3),fx(p.v+1.96*p.sd,3)]};})));
+        fx(p.v-1.96*p.sd,3),fx(p.v+1.96*p.sd,3),fx(1.96*p.sd,3)]};})));
+    fp.appendChild(el("div",{"class":"note"},[
+      "الفاصل يتّسع كلما ابتعد اليوم لأنه يجمع تشتت البواقى وعدم يقين ميل الانحدار ومعامل توسيع لارتباط البواقى الزمنى. "+
+      "ويظل قاصراً عن نموذج هيدروليكى: لا يعرف بوابةً فُتحت ولا محطةً بدأت التشغيل ولا موجةً قادمة من المنبع."]));
   }
   c.appendChild(fp);
 }
@@ -929,7 +1047,7 @@ function secAlerts(c){
     an.list.forEach(function(a){all.push({t:"شذوذ",site:s,di:a.di,txt:a.dir+" غير معتاد — المتوسط "+fx(a.v,3)+" م"});});
     zeroDays(s).forEach(function(z){all.push({t:"أصفار",site:s,di:z.di,txt:z.n+" قراءة صفرية"});});
     var byDay={};
-    s.rows.forEach(function(r){var f=flagOf(r.up)||flagOf(r.dn);
+    s.rows.forEach(function(r){var f=flagOf(r.up,s,r)||flagOf(r.dn,s,r);
       if(f){var k=r.di+"|"+f;byDay[k]=(byDay[k]||0)+1;}});
     Object.keys(byDay).forEach(function(k){
       var p=k.split("|");
@@ -1018,10 +1136,10 @@ function secExport(c){
       head=["التاريخ","الساعة","الموقع","الترعة","الأمام الخام","الخلف الخام","الأمام المعتمد","الحالة"];
       list.forEach(function(s){s.rows.forEach(function(r){
         if(r.di<f||r.di>t)return;
-        var fl=flagOf(r.up)||flagOf(r.dn);
+        var fl=flagOf(r.up,s,r)||flagOf(r.dn,s,r);
         rows.push([dayStr(r.di),r.h,s.name,s.canal,
           r.up===null?"":r.up,r.dn===null?"":r.dn,
-          (r.up!==null&&!isBad(r.up))?r.up:"",
+          (r.up!==null&&!isBad(r.up,s,r))?r.up:"",
           fl||(r.up===0?"صفر":"سليم")]);});});
     }else{
       head=["التاريخ","الموقع","الترعة","متوسط الأمام","عدد القراءات المعتمدة"];
@@ -1061,12 +1179,9 @@ function secQuality(c){
   c.appendChild(panel("سلامة كل موقع","نسبة القراءات السليمة وعدّاد كل نوع عطل",null,[
     tbl(["الموقع","الترعة","القراءات","777","888","5.00","سالبة","صفرية","السلامة"],rows)]));
 
-  var burst={};
-  SITES.forEach(function(s){s.rows.forEach(function(r){
-    if(r.up===FAULT||r.dn===FAULT){var k=r.di+"."+r.h;burst[k]=(burst[k]||0)+1;}});});
   var bl=[];
-  Object.keys(burst).forEach(function(k){if(burst[k]<3)return;
-    var p=k.split(".");bl.push({di:parseInt(p[0],10),h:parseInt(p[1],10),n:burst[k]});});
+  Object.keys(FAULT_STAMPS).forEach(function(k){
+    var p=k.split(".");bl.push({di:parseInt(p[0],10),h:parseInt(p[1],10),n:FAULT_STAMPS[k]});});
   bl.sort(function(a,b){return (b.di-a.di)||(b.h-a.h);});
   c.appendChild(panel("العطل المنظومى","لحظات كتب فيها النظام قيمة واحدة فى مواقع متعددة",null,[
     bl.length?tbl(["التوقيت","عدد المواقع","القيمة","التشخيص"],bl.map(function(f){
@@ -1141,13 +1256,13 @@ function setupInstall(){
 /* ============ الإقلاع ============ */
 function boot(){
   q("verlbl").textContent="build "+BUILD;
-  loadArchive();computeStats();loadUser();buildNav();go("canal");
-  loadLive().then(mergeLatest).then(function(){render();
+  loadArchive();computeFaultContext();computeStats();loadUser();buildNav();go("canal");
+  loadLive().then(loadUserRemote).then(mergeLatest).then(function(){render();
     fbPatch("registry/"+APPID,{app:APPID,name:"مِرصد التليمترى",type:"dashboard",
       version:BUILD,lastSeen:Date.now()});});
   q("btn-refresh").onclick=function(){
-    SEL.date=null;
-    loadLive().then(mergeLatest).then(render);};
+    SEL.date=null;SEL.hour=null;
+    loadLive().then(loadUserRemote).then(mergeLatest).then(render);};
   q("btn-print").onclick=function(){window.print();};
   setupInstall();
   if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(function(){});
