@@ -4,14 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#155b75">
-<title>مِرصد التليمترى — الإدارة المركزية للموارد المائية والرى للقاهرة والجيزة</title>
+<title>مِرصد التليمترى — لوحة الترعة والنقطة</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="مِرصد التليمترى">
-<meta name="description" content="مراقبة مناسيب مواقع التليمترى وجودة البيانات وساعات تشغيل الطلمبات — الإدارة المركزية للموارد المائية والرى لمحافظتى القاهرة والجيزة">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -20,122 +18,123 @@
   --paper:#faf8f2; --paper-2:#f3efe4; --sand:#e9dfc8;
   --lake:#247ba0; --lake-deep:#155b75; --green:#4d7c5a; --field:#dce8d7;
   --ink:#243238; --muted:#66736f; --clay:#b46f4b;
-  --line:#ded6c5; --white:#ffffffd6; --white-solid:#ffffff;
-  --amber:#c58a2f; --danger:#b8503f; --danger-bg:#f6e7e3;
+  --line:#ded6c5; --white:#ffffffd6; --amber:#c58a2f;
+  --danger:#b8503f; --danger-bg:#f6e7e3;
   --shadow:0 10px 30px #4d432c14, 0 2px 4px #4d432c0d;
   --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{background:var(--paper);-webkit-text-size-adjust:100%;overflow-x:hidden}
-body{color:var(--ink);background:var(--paper);
-  font-family:"IBM Plex Sans Arabic","Noto Kufi Arabic","Segoe UI",Tahoma,Arial,sans-serif;
-  line-height:1.5;-webkit-font-smoothing:antialiased}
+body{color:var(--ink);background:var(--paper);line-height:1.5;-webkit-font-smoothing:antialiased;
+  font-family:"IBM Plex Sans Arabic","Noto Kufi Arabic","Segoe UI",Tahoma,Arial,sans-serif}
 button{cursor:pointer;color:inherit;font:inherit}
-h1,h2,h3{letter-spacing:-.3px}
-::selection{background:#247ba033}
-.app-shell{
-  background:
-    radial-gradient(circle at 8% 0%, #247ba014, transparent 28%),
-    linear-gradient(#ffffff70,#ffffff70),
-    repeating-linear-gradient(120deg, transparent 0 72px, #b46f4b06 73px 74px),
-    var(--paper);
-  grid-template-columns:1fr 248px;min-height:100vh;display:grid}
-@media(max-width:820px){.app-shell{grid-template-columns:1fr}.side-nav{display:none!important}}
-.side-nav{border-left:1px solid var(--line);z-index:50;backdrop-filter:blur(18px);
-  background:rgba(249,247,239,.94);flex-direction:column;grid-area:1/2;height:100vh;
-  padding:22px 16px;display:flex;position:sticky;top:0}
-.brand-mark{grid-template-rows:36px 20px;grid-template-columns:46px 1fr;align-items:center;
-  height:78px;margin-bottom:16px;padding:8px 12px;display:grid}
-.brand-mark>span{color:#fff;background:linear-gradient(145deg,var(--lake),var(--green));
-  border-radius:13px 13px 13px 4px;grid-row:1/3;place-items:center;width:42px;height:42px;
-  font-size:23px;font-weight:800;display:grid}
-.brand-mark b{align-self:end;margin-right:10px;font-size:19px;color:var(--ink)}
-.brand-mark small{letter-spacing:1.6px;color:var(--lake);align-self:start;margin-right:10px;font-size:8px}
-.side-nav nav{flex-direction:column;gap:4px;display:flex;overflow-y:auto;margin:0 -6px;padding:0 6px}
-.side-nav nav button{color:#59645f;text-align:right;background:none;border:0;border-radius:12px;
-  align-items:center;gap:11px;width:100%;min-height:44px;padding:8px 12px;font-size:12.5px;
-  font-weight:600;transition:.18s;display:flex}
+.app-shell{background:
+   radial-gradient(circle at 8% 0%, #247ba014, transparent 28%),
+   linear-gradient(#ffffff70,#ffffff70),
+   repeating-linear-gradient(120deg, transparent 0 72px, #b46f4b06 73px 74px),
+   var(--paper);
+  display:grid;grid-template-columns:1fr 248px;min-height:100vh}
+@media(max-width:1000px){.app-shell{grid-template-columns:1fr}.side-nav{display:none!important}}
+.side-nav{grid-area:1/2;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;
+  padding:22px 16px;border-left:1px solid var(--line);background:rgba(249,247,239,.94);backdrop-filter:blur(18px)}
+.brand-mark{display:grid;grid-template-columns:46px 1fr;grid-template-rows:36px 20px;
+  align-items:center;height:78px;margin-bottom:16px;padding:8px 12px}
+.brand-mark>span{grid-row:1/3;width:42px;height:42px;display:grid;place-items:center}
+.brand-mark img{width:42px;height:42px;border-radius:13px 13px 13px 4px;display:block}
+.brand-mark b{align-self:end;margin-right:10px;font-size:18px}
+.brand-mark small{align-self:start;margin-right:10px;font-size:8px;letter-spacing:1.6px;color:var(--lake)}
+.side-nav nav{display:flex;flex-direction:column;gap:4px;overflow-y:auto;margin:0 -6px;padding:0 6px}
+.side-nav nav button{display:flex;align-items:center;gap:11px;width:100%;min-height:44px;
+  padding:8px 12px;border:0;border-radius:12px;background:none;color:#59645f;
+  font-size:12.5px;font-weight:600;text-align:right;transition:.18s}
 .side-nav nav button:hover{background:#f0ece0}
-.side-nav nav button.active{color:var(--lake-deep);box-shadow:inset -3px 0 var(--lake);background:#e6f0ed}
-.nav-icon{opacity:.92;border:1px solid currentColor;border-radius:8px;place-items:center;
-  width:26px;height:26px;font-size:15px;display:grid;flex:0 0 auto}
+.side-nav nav button.active{background:#e6f0ed;color:var(--lake-deep);box-shadow:inset -3px 0 var(--lake)}
+.nav-icon{display:grid;place-items:center;width:26px;height:26px;flex:0 0 auto;
+  border:1px solid currentColor;border-radius:8px;font-size:14px;opacity:.92}
 .nav-num{margin-right:auto;font-family:var(--mono);font-size:9px;opacity:.5}
-.nav-foot{border-top:1px solid var(--line);color:var(--muted);grid-template-columns:10px 1fr;
-  align-items:center;gap:4px 7px;margin-top:12px;padding:14px 8px 2px;font-size:11px;display:grid}
+.nav-foot{display:grid;grid-template-columns:10px 1fr;align-items:center;gap:4px 7px;
+  margin-top:12px;padding:14px 8px 2px;border-top:1px solid var(--line);color:var(--muted);font-size:11px}
 .main{grid-area:1/1;min-width:0;display:flex;flex-direction:column}
-.topbar{border-bottom:1px solid var(--line);z-index:30;backdrop-filter:blur(16px);
-  background:rgba(250,248,242,.8);justify-content:space-between;align-items:center;
-  gap:12px;min-height:92px;padding:16px 30px;display:flex;position:sticky;top:0}
-.topbar .eyebrow{color:var(--lake);letter-spacing:.4px;margin-bottom:5px;font-size:9px;font-weight:800;display:block}
-.topbar h1{font-size:19px;font-weight:700;color:var(--ink)}
-.content{padding:24px 30px;max-width:1180px;width:100%}
-@media(max-width:820px){.topbar,.content{padding-inline:16px}.topbar h1{font-size:16px}}
-.mobsel{display:none;margin-bottom:16px}
-@media(max-width:820px){.mobsel{display:block}}
-.grid{display:grid;gap:16px}
-.grid.g4{grid-template-columns:repeat(4,1fr)}
-.grid.g3{grid-template-columns:repeat(3,1fr)}
-.grid.g2{grid-template-columns:repeat(2,1fr)}
-@media(max-width:900px){.grid.g4{grid-template-columns:repeat(2,1fr)}.grid.g3,.grid.g2{grid-template-columns:1fr}}
-.kpi-card{background:var(--white);border:1px solid var(--line);box-shadow:var(--shadow);
-  border-radius:14px;padding:15px;display:flex;gap:12px;align-items:flex-start}
-.kpi-icon{width:43px;height:43px;color:var(--lake-deep);background:#e8f0f1;border:1px solid #c8d9d9;
-  border-radius:13px;place-items:center;font-size:20px;display:grid;flex:0 0 auto}
-.kpi-card.green .kpi-icon{color:var(--green);background:#edf4e8;border-color:#c8d9bd}
-.kpi-card.sand .kpi-icon{color:var(--clay);background:#f5eee1;border-color:#e3d3bd}
-.kpi-card.bad .kpi-icon{color:var(--danger);background:var(--danger-bg);border-color:#e6c6be}
-.kpi-body{min-width:0}
-.kpi-body .lbl{font-size:10.5px;color:var(--muted);font-weight:600;margin-bottom:3px}
-.kpi-body .big{font-size:26px;font-weight:700;font-family:var(--mono);color:var(--ink);line-height:1.1;
-  font-variant-numeric:tabular-nums}
-.kpi-body .big .unit{font-size:11px;font-weight:500;color:var(--muted);margin-right:3px;font-family:inherit}
-.kpi-body .sub{font-size:9.5px;color:var(--muted);margin-top:4px}
-.panel{background:var(--white);border:1px solid var(--line);box-shadow:var(--shadow);
-  border-radius:16px;padding:20px;margin-top:16px}
-.panel h2{font-size:15px;font-weight:700;margin-bottom:4px}
-.eyebrow{color:var(--lake);letter-spacing:.4px;margin-bottom:5px;font-size:9px;font-weight:800;display:block}
-.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
-.btn{border:1px solid var(--line);background:#fff;border-radius:10px;padding:10px 15px;font-size:11px;
-  font-weight:600;color:#4c5854;transition:.15s;display:inline-flex;align-items:center;gap:7px;min-height:44px}
+.topbar{position:sticky;top:0;z-index:30;display:flex;justify-content:space-between;align-items:center;
+  gap:12px;min-height:88px;padding:14px 26px;border-bottom:1px solid var(--line);
+  background:rgba(250,248,242,.86);backdrop-filter:blur(16px)}
+.eyebrow{display:block;margin-bottom:5px;color:var(--lake);font-size:9px;font-weight:800;letter-spacing:.4px}
+.topbar h1{font-size:18px;font-weight:700}
+.content{width:100%;max-width:1240px;padding:20px 26px 40px}
+@media(max-width:1000px){.topbar,.content{padding-inline:14px}.topbar h1{font-size:15px}}
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}.g6{grid-template-columns:repeat(6,1fr)}
+@media(max-width:1000px){.g6,.g4{grid-template-columns:repeat(2,1fr)}.g3,.g2{grid-template-columns:1fr}}
+.panel{margin-top:14px;padding:18px;border:1px solid var(--line);border-radius:16px;
+  background:var(--white);box-shadow:var(--shadow)}
+.panel h2{font-size:15px;font-weight:700}
+.panel .sub{margin-top:3px;color:var(--muted);font-size:11px}
+.field{padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:#fff}
+.field .lbl{font-size:9.5px;font-weight:700;color:var(--muted);margin-bottom:4px}
+.field .val{font-family:var(--mono);font-size:15px;font-weight:600;font-variant-numeric:tabular-nums}
+.field.hi{background:linear-gradient(135deg,#e9f2f5,#f4f7f2);border-color:#c8dbdd}
+.field.hi .val{color:var(--lake-deep);font-size:18px}
+.kpi{display:flex;gap:11px;align-items:flex-start;padding:14px;border:1px solid var(--line);
+  border-radius:14px;background:var(--white);box-shadow:var(--shadow)}
+.kpi i{display:grid;place-items:center;width:40px;height:40px;flex:0 0 auto;border-radius:12px;
+  background:#e8f0f1;border:1px solid #c8d9d9;color:var(--lake-deep);font-size:18px;font-style:normal}
+.kpi.green i{background:#edf4e8;border-color:#c8d9bd;color:var(--green)}
+.kpi.sand i{background:#f5eee1;border-color:#e3d3bd;color:var(--clay)}
+.kpi.bad i{background:var(--danger-bg);border-color:#e6c6be;color:var(--danger)}
+.kpi .lbl{font-size:10px;font-weight:600;color:var(--muted);margin-bottom:2px}
+.kpi .big{font-family:var(--mono);font-size:22px;font-weight:700;line-height:1.15;font-variant-numeric:tabular-nums}
+.kpi .big u{text-decoration:none;font-family:inherit;font-size:10px;font-weight:500;color:var(--muted);margin-right:3px}
+.kpi .sub{margin-top:3px;font-size:9.5px;color:var(--muted)}
+select,input[type=text],input[type=date],input[type=number]{width:100%;min-height:42px;padding:8px 11px;
+  border:1px solid var(--line);border-radius:11px;background:#fff;color:var(--ink);font:inherit;font-size:12.5px}
+label.fl{display:block;margin-bottom:5px;font-size:10px;font-weight:700;color:var(--muted)}
+.btn{display:inline-flex;align-items:center;gap:7px;min-height:42px;padding:9px 15px;
+  border:1px solid var(--line);border-radius:11px;background:#fff;color:#4c5854;
+  font-size:11.5px;font-weight:600;transition:.15s}
 .btn:hover{border-color:var(--lake);color:var(--lake-deep)}
-.btn.solid{background:linear-gradient(135deg,var(--lake),var(--lake-deep));color:#fff;border:0;
+.btn.solid{border:0;background:linear-gradient(135deg,var(--lake),var(--lake-deep));color:#fff;
   box-shadow:0 6px 14px #247ba026}
 .btn.sm{min-height:34px;padding:6px 11px;font-size:10.5px}
-.pill{font-size:9px;font-weight:700;padding:3px 9px;border-radius:999px;display:inline-block}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.pill{display:inline-block;padding:3px 9px;border-radius:999px;font-size:9px;font-weight:700}
+.pill.lake{background:#e6f0f4;color:var(--lake-deep)}
 .pill.green{background:#edf4e8;color:var(--green)}
 .pill.sand{background:#f5eee1;color:var(--clay)}
 .pill.danger{background:var(--danger-bg);color:var(--danger)}
-.pill.lake{background:#e6f0f4;color:var(--lake-deep)}
-table{border-collapse:collapse;width:100%;font-size:11.5px}
-th{background:var(--paper-2);color:var(--muted);font-weight:700;font-size:10px;text-align:right;
-  padding:9px 8px;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:2}
+table{width:100%;border-collapse:collapse;font-size:11.5px}
+th{position:sticky;top:0;z-index:2;padding:9px 8px;border-bottom:1px solid var(--line);
+  background:var(--paper-2);color:var(--muted);font-size:10px;font-weight:700;text-align:right}
 td{padding:8px;border-bottom:1px solid #efeadd;font-variant-numeric:tabular-nums}
-tr.flagged td{background:#fbf1ee}
-.tw{overflow:auto;max-height:520px;border:1px solid var(--line);border-radius:12px;margin-top:12px;background:#fff}
-select,input[type=text]{font:inherit;font-size:12px;padding:9px 11px;border:1px solid var(--line);
-  border-radius:10px;background:#fff;color:var(--ink);min-height:44px;width:100%;max-width:340px}
-label.fl{font-size:10.5px;color:var(--muted);font-weight:600;display:block;margin-bottom:5px}
-.stamp{font-size:9.5px;font-weight:700;padding:3px 9px;border-radius:999px;background:#edf4e8;color:var(--green);display:inline-block}
+tr.bad td{background:#fbf1ee}
+.tw{max-height:430px;margin-top:12px;overflow:auto;border:1px solid var(--line);border-radius:12px;background:#fff}
+svg.chart{display:block;width:100%;height:280px}
+.chartbox{margin-top:12px;overflow:hidden}
+.legend{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:10px;font-size:10px;color:var(--muted)}
+.legend i{display:inline-block;width:11px;height:11px;margin-left:5px;border-radius:2px;vertical-align:-1px}
+.note{margin-top:9px;font-size:11px;line-height:1.85;color:var(--muted)}
+.state{padding:22px 14px;text-align:center;color:var(--muted);font-size:12px}
+.state b{display:block;margin-bottom:6px;color:var(--ink);font-size:13px}
+.stamp{display:inline-block;padding:3px 9px;border-radius:999px;background:#edf4e8;color:var(--green);
+  font-size:9.5px;font-weight:700}
 .stamp.warn{background:#f5eee1;color:var(--clay)}
 .stamp.bad{background:var(--danger-bg);color:var(--danger)}
-.skel{background:linear-gradient(90deg,#efeade,#f7f4ea,#efeade);background-size:200% 100%;
-  animation:sh 1.2s linear infinite;border-radius:10px;height:64px}
+.skel{height:60px;border-radius:10px;background:linear-gradient(90deg,#efeade,#f7f4ea,#efeade);
+  background-size:200% 100%;animation:sh 1.2s linear infinite}
 @keyframes sh{0%{background-position:200% 0}100%{background-position:-200% 0}}
-.state{text-align:center;padding:26px 16px;color:var(--muted);font-size:12px}
-.state b{display:block;color:var(--ink);font-size:13px;margin-bottom:6px}
-.hm{display:grid;gap:2px;overflow:auto;padding-bottom:6px}
-.hm i{width:11px;height:11px;border-radius:2px;display:block}
-.hmrow{display:flex;gap:2px;align-items:center}
-.hmlbl{font-size:9px;color:var(--muted);width:104px;flex:0 0 104px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
-.legend{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px;font-size:10px;color:var(--muted);align-items:center}
-.legend span i{width:11px;height:11px;border-radius:2px;display:inline-block;margin-left:5px;vertical-align:-1px}
-.note{font-size:11px;color:var(--muted);margin-top:8px;line-height:1.8}
-.chartbox{width:100%;overflow:hidden;margin-top:14px}
-svg.chart{width:100%;height:290px;display:block}
-.bar{height:9px;background:#efeadd;border-radius:999px;overflow:hidden;min-width:70px}
-.bar i{display:block;height:100%;background:var(--green)}
-.bar i.warn{background:var(--amber)} .bar i.bad{background:var(--danger)}
-.rowflex{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.serial{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;
+  margin-top:14px;padding:16px;border:1.5px dashed var(--green);border-radius:14px;background:#f7faf5}
+.serial b{font-family:var(--mono);font-size:19px;letter-spacing:2px;color:var(--ink)}
+.serial-legend{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;margin-top:12px;font-size:10.5px;color:var(--muted)}
+.serial-legend span b{font-family:var(--mono);font-size:11px;color:var(--lake-deep);letter-spacing:0}
+.alert-row{display:flex;gap:9px;align-items:flex-start;padding:9px 11px;margin-top:7px;
+  border-radius:10px;background:var(--danger-bg);color:#7d3527;font-size:11.5px}
+.alert-row.warn{background:#f7f0e2;color:#7a5417}
+.alert-row b{font-family:var(--mono)}
+.mobsel{display:none;margin-bottom:14px}
+@media(max-width:1000px){.mobsel{display:block}}
+.rowflex{display:flex;flex-wrap:wrap;gap:9px;align-items:center}
+@media print{.side-nav,.topbar .actions,.mobsel{display:none}.app-shell{display:block}}
 </style>
 </head>
 <body>
@@ -163,7 +162,7 @@ shalouf|محطة الشلوفة|18|0.23:3.602:8.81,1.23:3.553:9.09,2.23:3.638:8.
 <div class="app-shell">
   <aside class="side-nav">
     <div class="brand-mark">
-      <span style="background:none;padding:0"><img src="icon-192.png" alt="" width="42" height="42" style="width:42px;height:42px;border-radius:13px 13px 13px 4px;display:block"></span>
+      <span><img src="icon-192.png" alt="" width="42" height="42"></span>
       <b>مِرصد التليمترى</b>
       <small>القاهرة والجيزة — الموارد المائية والرى</small>
     </div>
@@ -171,18 +170,15 @@ shalouf|محطة الشلوفة|18|0.23:3.602:8.81,1.23:3.553:9.09,2.23:3.638:8.
     <div class="nav-foot">
       <span id="dot" style="width:8px;height:8px;border-radius:50%;background:var(--muted)"></span>
       <span id="constate">جارٍ الاتصال…</span>
-      <small id="verlbl">build 1.02</small>
+      <small id="verlbl">build 2.00</small>
     </div>
   </aside>
   <main class="main">
     <header class="topbar">
-      <div>
-        <span class="eyebrow" id="tb-eyebrow"></span>
-        <h1 id="tb-title"></h1>
-      </div>
+      <div><span class="eyebrow" id="tb-eyebrow"></span><h1 id="tb-title"></h1></div>
       <div class="actions" style="margin:0">
+        <button class="btn" id="btn-install" style="display:none">⤓ تثبيت</button>
         <button class="btn" id="btn-refresh">↻ تحديث</button>
-        <button class="btn" id="btn-install" style="display:none">⤓ تثبيت التطبيق</button>
         <button class="btn solid" id="btn-print">⎙ طباعة</button>
       </div>
     </header>
@@ -191,733 +187,827 @@ shalouf|محطة الشلوفة|18|0.23:3.602:8.81,1.23:3.553:9.09,2.23:3.638:8.
 </div>
 
 <script>
-var BUILD="1.02";
+var BUILD="2.00";
 var FB="https://ismailia-64500-default-rtdb.europe-west1.firebasedatabase.app";
 var APPID="telemetry-monitor";
 var BRIDGE="telemetry-bridge";
 var SENT=[777,888];
 var FAULT=5;
 var BASEDATE=new Date(Date.UTC(2026,5,26));
-
-/* ---------------- أدوات ---------------- */
-function el(tag,attrs,kids){
-  var e=document.createElement(tag); attrs=attrs||{};
-  for(var k in attrs){ if(k==="class")e.className=attrs[k];
-    else if(k==="html")e.innerHTML=attrs[k];
-    else if(k==="style")e.setAttribute("style",attrs[k]);
-    else e.setAttribute(k,attrs[k]); }
-  (kids||[]).forEach(function(c){ if(c==null)return;
-    e.appendChild(typeof c==="string"||typeof c==="number"?document.createTextNode(String(c)):c); });
-  return e;
-}
-function q(id){ return document.getElementById(id); }
-function fx(v,n){ if(v===null||v===undefined||v==="")return "—"; return Number(v).toFixed(n===undefined?2:n); }
-function dayStr(di){
-  var d=new Date(BASEDATE.getTime()+di*86400000);
-  var m=d.getUTCMonth()+1, dd=d.getUTCDate();
-  return d.getUTCFullYear()+"-"+(m<10?"0":"")+m+"-"+(dd<10?"0":"")+dd;
-}
-function isSent(v){ return v!==null && (v===SENT[0]||v===SENT[1]); }
-function isFault(v){ return v!==null && v===FAULT; }
-function isBad(v){ return v!==null && (isSent(v)||isFault(v)||v<0); }
-function flagOf(v){
-  if(v===null)return null;
-  if(v===SENT[0])return "راية 777";
-  if(v===SENT[1])return "راية 888";
-  if(v===FAULT)return "قيمة افتراضية 5.00";
-  if(v<0)return "قيمة سالبة";
-  return null;
-}
-
-/* ---------------- تحميل الأرشيف المضمّن ---------------- */
-var SITES=[], BYID={}, MAXDI=0;
-function loadArchive(){
-  var raw=q("ARCHIVE").textContent.trim();
-  var lines=raw.split("\n");
-  for(var i=0;i<lines.length;i++){
-    var L=lines[i]; if(!L)continue;
-    var p=L.split("|");
-    var site={id:p[0],name:p[1],dir:p[2],rows:[]};
-    var segs=p[3]?p[3].split(","):[];
-    for(var j=0;j<segs.length;j++){
-      var s=segs[j].split(":");
-      var dh=s[0].split(".");
-      var di=parseInt(dh[0],10), hh=parseInt(dh[1],10);
-      var up=s[1]===""?null:parseFloat(s[1]);
-      var dn=s[2]===""?null:parseFloat(s[2]);
-      if(di>MAXDI)MAXDI=di;
-      site.rows.push({di:di,h:hh,up:up,dn:dn});
-    }
-    SITES.push(site); BYID[site.id]=site;
-  }
-  SITES.sort(function(a,b){ return a.name.localeCompare(b.name,"ar"); });
-}
 var DIRNAME={"4":"قناطر الدلتا","18":"الإسماعيلية","19":"الصالحية","20":"القليوبية"};
 
-/* ---------------- إحصاء ---------------- */
+/* ============ أدوات ============ */
+function el(t,a,k){var e=document.createElement(t);a=a||{};
+  for(var n in a){if(n==="class")e.className=a[n];else if(n==="html")e.innerHTML=a[n];
+    else if(n==="style")e.setAttribute("style",a[n]);else e.setAttribute(n,a[n]);}
+  (k||[]).forEach(function(c){if(c==null)return;
+    e.appendChild(typeof c==="object"&&c.nodeType?c:document.createTextNode(String(c)));});
+  return e;}
+function q(i){return document.getElementById(i);}
+function fx(v,n){if(v===null||v===undefined||v==="")return "—";return Number(v).toFixed(n===undefined?2:n);}
+function dayStr(di){var d=new Date(BASEDATE.getTime()+di*86400000);
+  var m=d.getUTCMonth()+1,dd=d.getUTCDate();
+  return d.getUTCFullYear()+"-"+(m<10?"0":"")+m+"-"+(dd<10?"0":"")+dd;}
+function diOf(s){return Math.round((Date.parse(s+"T00:00:00Z")-BASEDATE.getTime())/86400000);}
+function isBad(v){return v!==null&&(SENT.indexOf(v)>-1||v===FAULT||v<0);}
+function flagOf(v){if(v===null)return null;
+  if(v===SENT[0])return "راية 777";if(v===SENT[1])return "راية 888";
+  if(v===FAULT)return "قيمة افتراضية 5.00";if(v<0)return "قيمة سالبة";return null;}
+function mean(a){if(!a.length)return null;var s=0;for(var i=0;i<a.length;i++)s+=a[i];return s/a.length;}
+function median(a){if(!a.length)return null;var b=a.slice().sort(function(x,y){return x-y;});
+  var m=Math.floor(b.length/2);return b.length%2?b[m]:(b[m-1]+b[m])/2;}
+
+/* ============ الأرشيف ============ */
+var SITES=[],BYID={},MAXDI=0;
+function loadArchive(){
+  var raw=q("ARCHIVE").textContent.trim(),lines=raw.split("\n");
+  for(var i=0;i<lines.length;i++){
+    var L=lines[i];if(!L)continue;
+    var p=L.split("|"),site={id:p[0],name:p[1],dir:p[2],rows:[]};
+    var segs=p[3]?p[3].split(","):[];
+    for(var j=0;j<segs.length;j++){
+      var s=segs[j].split(":"),dh=s[0].split(".");
+      var di=parseInt(dh[0],10),hh=parseInt(dh[1],10);
+      if(di>MAXDI)MAXDI=di;
+      site.rows.push({di:di,h:hh,up:s[1]===""?null:parseFloat(s[1]),dn:s[2]===""?null:parseFloat(s[2])});
+    }
+    site.canal=canalOf(site.name);
+    site.km=kmOf(site.name);
+    SITES.push(site);BYID[site.id]=site;
+  }
+  SITES.sort(function(a,b){return a.name.localeCompare(b.name,"ar");});
+}
+function canalOf(n){
+  if(n.indexOf("سماعيلي")>-1||n.indexOf("المحسمة")>-1||n.indexOf("المنايف")>-1)return "ترعة الإسماعيلية";
+  if(n.indexOf("السويس")>-1||n.indexOf("الشلوفة")>-1)return "ترعة السويس";
+  if(n.indexOf("بورسعيد")>-1)return "ترعة بورسعيد";
+  if(n.indexOf("الصالحية")>-1||n.indexOf("السعيدية")>-1||n.indexOf("الملاك")>-1)return "ترعة الصالحية";
+  return "غير مصنَّف";
+}
+function kmOf(n){
+  var t=n.replace(/[٠-٩]/g,function(c){return "٠١٢٣٤٥٦٧٨٩".indexOf(c);});
+  if(t.indexOf("فم")===0)return 0;
+  var m=/(\d+(?:\.\d+)?)/.exec(t);
+  return m?parseFloat(m[1]):null;
+}
+
+/* ============ إحصاء ============ */
+var STATS={};
+function daily(site,fromDi,toDi){
+  var by={};
+  site.rows.forEach(function(r){
+    if(fromDi!==undefined&&(r.di<fromDi||r.di>toDi))return;
+    if(r.up===null||isBad(r.up)||r.up===0)return;
+    (by[r.di]=by[r.di]||[]).push(r.up);
+  });
+  var out=[];
+  Object.keys(by).forEach(function(k){out.push({di:parseInt(k,10),v:mean(by[k]),n:by[k].length});});
+  out.sort(function(a,b){return a.di-b.di;});
+  return out;
+}
 function statsOf(site){
-  var ok=0,f777=0,f888=0,f5=0,neg=0,zero=0,vals=[],last=null;
-  for(var i=0;i<site.rows.length;i++){
-    var r=site.rows[i];
-    var fu=flagOf(r.up), fd=flagOf(r.dn);
-    var fl=fu||fd;
-    if(fl==="راية 777")f777++;
-    else if(fl==="راية 888")f888++;
-    else if(fl==="قيمة افتراضية 5.00")f5++;
-    else if(fl==="قيمة سالبة")neg++;
+  var ok=0,f={},vals=[],last=null,zero=0;
+  site.rows.forEach(function(r){
+    var fl=flagOf(r.up)||flagOf(r.dn);
+    if(fl)f[fl]=(f[fl]||0)+1;
     else if(r.up===0)zero++;
     else ok++;
     if(r.up!==null&&!isBad(r.up)&&r.up>0)vals.push(r.up);
     if(!last||r.di>last.di||(r.di===last.di&&r.h>last.h))last=r;
-  }
-  var mn=null,mx=null,sum=0;
-  for(var k=0;k<vals.length;k++){ var v=vals[k]; if(mn===null||v<mn)mn=v; if(mx===null||v>mx)mx=v; sum+=v; }
-  return {n:site.rows.length,ok:ok,f777:f777,f888:f888,f5:f5,neg:neg,zero:zero,
-    min:mn,max:mx,avg:vals.length?sum/vals.length:null,vals:vals.length,last:last,
-    health:site.rows.length?ok/site.rows.length:0};
-}
-var STATS={};
-function computeStats(){ for(var i=0;i<SITES.length;i++){ STATS[SITES[i].id]=statsOf(SITES[i]); } }
-
-/* ---------------- الحدود (يدخلها المستخدم) ---------------- */
-var LIMITS={};
-function loadLimits(){
-  try{ var s=localStorage.getItem("mwri.telemetry.limits"); if(s)LIMITS=JSON.parse(s); }catch(e){}
-}
-function saveLimits(){
-  try{ localStorage.setItem("mwri.telemetry.limits",JSON.stringify(LIMITS)); }catch(e){}
-  fbPatch("apps/"+APPID+"/data/limits",LIMITS);
-}
-
-/* ---------------- Firebase ---------------- */
-var LIVE={wl:null,pump:null,err:null,loading:true};
-function fbGet(path){
-  return fetch(FB+"/mwri/"+path+".json",{cache:"no-store"}).then(function(r){
-    if(!r.ok)throw new Error("HTTP "+r.status);
-    return r.json();
   });
+  return {n:site.rows.length,ok:ok,flags:f,zero:zero,last:last,
+    min:vals.length?Math.min.apply(null,vals):null,
+    max:vals.length?Math.max.apply(null,vals):null,
+    avg:mean(vals),health:site.rows.length?ok/site.rows.length:0};
 }
-function fbPatch(path,obj){
-  obj.updatedAt=Date.now(); obj.src=APPID;
-  return fetch(FB+"/mwri/"+path+".json",{method:"PATCH",body:JSON.stringify(obj)})
-    .then(function(r){ if(!r.ok)throw new Error("HTTP "+r.status); return true; })
-    .catch(function(e){ console.log("fb patch",e.message); return false; });
+function computeStats(){SITES.forEach(function(s){STATS[s.id]=statsOf(s);});}
+
+/* الشواذ: انحراف مطلق متوسط عن الوسيط (MAD) على المتوسط اليومى */
+function anomalies(site){
+  var d=daily(site),v=d.map(function(x){return x.v;});
+  if(v.length<7)return {rows:d,list:[],lo:null,hi:null};
+  var med=median(v);
+  var dev=v.map(function(x){return Math.abs(x-med);});
+  var mad=median(dev)||0.001;
+  var lo=med-3*1.4826*mad,hi=med+3*1.4826*mad;
+  var list=[];
+  d.forEach(function(x){if(x.v<lo||x.v>hi)list.push({di:x.di,v:x.v,dir:x.v>hi?"ارتفاع":"انخفاض"});});
+  return {rows:d,list:list,lo:lo,hi:hi,med:med};
 }
-function setConn(state,txt){
-  var d=q("dot"), c=q("constate");
-  var col=state==="ok"?"var(--green)":(state==="warn"?"var(--amber)":"var(--danger)");
-  d.style.background=col; c.textContent=txt;
+/* أيام بها قراءات صفرية */
+function zeroDays(site){
+  var by={};
+  site.rows.forEach(function(r){if(r.up===0)by[r.di]=(by[r.di]||0)+1;});
+  return Object.keys(by).map(function(k){return {di:parseInt(k,10),n:by[k]};})
+    .sort(function(a,b){return b.di-a.di;});
 }
+/* تنبؤ إحصائى: انحدار خطى على آخر N يوماً */
+function forecast(site,days,ahead){
+  var d=daily(site);
+  if(d.length<5)return null;
+  var seg=d.slice(-days);
+  var n=seg.length,sx=0,sy=0,sxx=0,sxy=0;
+  seg.forEach(function(p,i){sx+=i;sy+=p.v;sxx+=i*i;sxy+=i*p.v;});
+  var den=n*sxx-sx*sx;
+  if(!den)return null;
+  var b=(n*sxy-sx*sy)/den,a=(sy-b*sx)/n;
+  var res=seg.map(function(p,i){return p.v-(a+b*i);});
+  var sd=Math.sqrt(mean(res.map(function(r){return r*r;}))||0);
+  var out=[];
+  for(var k=1;k<=ahead;k++)out.push({di:seg[seg.length-1].di+k,v:a+b*(n-1+k),sd:sd});
+  return {hist:seg,pred:out,slope:b,sd:sd};
+}
+
+/* ============ Firebase ============ */
+var LIVE={wl:null,pump:null,err:null,loading:true};
+var META={};
+function fbGet(p){return fetch(FB+"/mwri/"+p+".json",{cache:"no-store"}).then(function(r){
+  if(!r.ok)throw new Error("HTTP "+r.status);return r.json();});}
+function fbPatch(p,o){o.updatedAt=Date.now();o.src=APPID;
+  return fetch(FB+"/mwri/"+p+".json",{method:"PATCH",body:JSON.stringify(o)})
+    .then(function(r){return r.ok;}).catch(function(){return false;});}
+function setConn(s,t){q("dot").style.background=s==="ok"?"var(--green)":(s==="warn"?"var(--amber)":"var(--danger)");
+  q("constate").textContent=t;}
+function stampText(ts){if(!ts)return "بلا ختم زمن";
+  var m=Math.round((Date.now()-ts)/60000);
+  if(m<60)return "منذ "+m+" دقيقة";var h=Math.round(m/60);
+  if(h<48)return "منذ "+h+" ساعة";return "منذ "+Math.round(h/24)+" يوماً";}
+function stampEl(ts){var c="stamp";
+  if(!ts)c="stamp bad";else{var h=(Date.now()-ts)/3600000;if(h>24)c="stamp bad";else if(h>6)c="stamp warn";}
+  return el("span",{"class":c},["آخر تحديث: "+stampText(ts)]);}
 function loadLive(){
-  LIVE.loading=true; LIVE.err=null;
+  LIVE.loading=true;LIVE.err=null;
   return fbGet("apps/"+BRIDGE+"/live").then(function(v){
     LIVE.loading=false;
-    if(!v){ LIVE.wl=null; LIVE.pump=null; setConn("warn","الجالب لم يرسل بيانات بعد"); return; }
-    LIVE.wl=v.wl||null; LIVE.pump=v.pump||null;
+    if(!v){LIVE.wl=null;LIVE.pump=null;setConn("warn","الجالب لم يرسل بيانات بعد");return;}
+    LIVE.wl=v.wl||null;LIVE.pump=v.pump||null;
     setConn("ok","متصل — "+stampText(LIVE.wl&&LIVE.wl.updatedAt));
-  }).catch(function(e){
-    LIVE.loading=false; LIVE.err=e.message;
-    setConn("bad","تعذّر الاتصال بالقاعدة: "+e.message);
-  });
+  }).catch(function(e){LIVE.loading=false;LIVE.err=e.message;
+    setConn("bad","تعذّر الاتصال: "+e.message);});
 }
-function stampText(ts){
-  if(!ts)return "بلا ختم زمن";
-  var mins=Math.round((Date.now()-ts)/60000);
-  if(mins<60)return "منذ "+mins+" دقيقة";
-  var h=Math.round(mins/60);
-  if(h<48)return "منذ "+h+" ساعة";
-  return "منذ "+Math.round(h/24)+" يوماً";
+/* بيانات يدخلها المستخدم: الكيلومتر والمساحة المخدومة والطول */
+var USER={km:{},canal:{}};
+function loadUser(){
+  try{var s=localStorage.getItem("mwri.tele.user");if(s)USER=JSON.parse(s);}catch(e){}
+  USER.km=USER.km||{};USER.canal=USER.canal||{};
 }
-function stampEl(ts){
-  var cls="stamp";
-  if(!ts)cls="stamp bad";
-  else{ var h=(Date.now()-ts)/3600000; if(h>24)cls="stamp bad"; else if(h>6)cls="stamp warn"; }
-  return el("span",{"class":cls},["آخر تحديث: "+stampText(ts)]);
+function saveUser(){
+  try{localStorage.setItem("mwri.tele.user",JSON.stringify(USER));}catch(e){}
+  fbPatch("apps/"+APPID+"/data/user",USER);
+}
+function kmFor(s){
+  if(USER.km[s.id]!==undefined&&USER.km[s.id]!==null&&USER.km[s.id]!=="")return Number(USER.km[s.id]);
+  return s.km;
 }
 
-/* ---------------- مكوّنات ---------------- */
+/* ============ مكوّنات ============ */
 function kpi(icon,cls,lbl,big,unit,sub){
-  return el("div",{"class":"kpi-card "+(cls||"")},[
-    el("div",{"class":"kpi-icon"},[icon]),
-    el("div",{"class":"kpi-body"},[
+  return el("div",{"class":"kpi "+(cls||"")},[
+    el("i",{},[icon]),
+    el("div",{style:"min-width:0"},[
       el("div",{"class":"lbl"},[lbl]),
-      el("div",{"class":"big","html":big+(unit?' <span class="unit">'+unit+'</span>':"")}),
-      sub?el("div",{"class":"sub"},[sub]):null
-    ])
-  ]);
+      el("div",{"class":"big",html:big+(unit?" <u>"+unit+"</u>":"")}),
+      sub?el("div",{"class":"sub"},[sub]):null])]);
 }
-function panel(eyebrow,title,kids){
+function field(lbl,val,hi){
+  return el("div",{"class":"field"+(hi?" hi":"")},[
+    el("div",{"class":"lbl"},[lbl]),el("div",{"class":"val"},[val])]);
+}
+function panel(eyebrow,title,sub,kids){
   var p=el("div",{"class":"panel"},[el("span",{"class":"eyebrow"},[eyebrow]),el("h2",{},[title])]);
-  (kids||[]).forEach(function(k){ if(k)p.appendChild(k); });
+  if(sub)p.appendChild(el("div",{"class":"sub"},[sub]));
+  (kids||[]).forEach(function(k){if(k)p.appendChild(k);});
   return p;
 }
-function emptyState(title,why,btnTxt,onClick){
-  var b=btnTxt?el("button",{"class":"btn"},[btnTxt]):null;
-  if(b&&onClick)b.onclick=onClick;
-  return el("div",{"class":"state"},[el("b",{},[title]),el("div",{},[why]),
+function emptyState(t,w,btn,fn){
+  var b=btn?el("button",{"class":"btn"},[btn]):null;if(b&&fn)b.onclick=fn;
+  return el("div",{"class":"state"},[el("b",{},[t]),el("div",{},[w]),
     b?el("div",{"class":"actions",style:"justify-content:center"},[b]):null]);
 }
-function tbl(headers,rows){
-  var t=el("table"), tr=el("tr");
-  headers.forEach(function(h){ tr.appendChild(el("th",{},[h])); });
+function tbl(head,rows){
+  var t=el("table"),tr=el("tr");
+  head.forEach(function(h){tr.appendChild(el("th",{},[h]));});
   t.appendChild(el("thead",{},[tr]));
   var tb=el("tbody");
   rows.forEach(function(r){
-    var x=el("tr",r.flag?{"class":"flagged"}:{});
-    r.cells.forEach(function(c){ x.appendChild(typeof c==="object"&&c&&c.nodeType?el("td",{},[c]):el("td",{},[c===null||c===undefined?"—":String(c)])); });
-    tb.appendChild(x);
-  });
+    var x=el("tr",r.bad?{"class":"bad"}:{});
+    r.cells.forEach(function(c){
+      x.appendChild(c&&c.nodeType?el("td",{},[c]):el("td",{},[c===null||c===undefined?"—":String(c)]));});
+    tb.appendChild(x);});
   t.appendChild(tb);
   return el("div",{"class":"tw"},[t]);
 }
-
-/* ---------------- رسم بيانى SVG ---------------- */
-function lineChart(series,labels,opts){
+function svgNS(tag,attrs,txt){
+  var e=document.createElementNS("http://www.w3.org/2000/svg",tag);
+  for(var k in attrs)e.setAttribute(k,attrs[k]);
+  if(txt!==undefined)e.textContent=txt;
+  return e;
+}
+/**
+ * رسم خطى عام
+ * series: [{name,color,pts:[{x,y,flag,dash}],dash:bool,marks:bool}]
+ */
+function chart(series,opts){
   opts=opts||{};
-  var W=900,H=290,padL=52,padR=14,padT=16,padB=42;
-  var all=[];
-  series.forEach(function(s){ s.pts.forEach(function(p){ if(p.v!==null)all.push(p.v); }); });
-  if(!all.length)return emptyState("لا توجد قراءات معتمدة","كل قراءات هذا الموقع فى الفترة المختارة رايات أو فراغات.");
-  var mn=Math.min.apply(null,all), mx=Math.max.apply(null,all);
-  if(mx-mn<0.05){ mx=mx+0.05; mn=mn-0.05; }
-  var pad=(mx-mn)*0.12; mn-=pad; mx+=pad;
-  var n=labels.length;
-  function X(i){ return padL+(n<2?0:(W-padL-padR)*i/(n-1)); }
-  function Y(v){ return padT+(H-padT-padB)*(1-(v-mn)/(mx-mn)); }
-  var svg=document.createElementNS("http://www.w3.org/2000/svg","svg");
-  svg.setAttribute("viewBox","0 0 "+W+" "+H);
-  svg.setAttribute("class","chart");
-  svg.setAttribute("preserveAspectRatio","none");
-  function add(tag,attrs,txt){
-    var e=document.createElementNS("http://www.w3.org/2000/svg",tag);
-    for(var k in attrs)e.setAttribute(k,attrs[k]);
-    if(txt!==undefined)e.textContent=txt;
-    svg.appendChild(e); return e;
-  }
+  var W=920,H=opts.h||280,padL=54,padR=16,padT=14,padB=44;
+  var xs=[],ys=[];
+  series.forEach(function(s){s.pts.forEach(function(p){if(p.y===null||p.y===undefined)return;
+    xs.push(p.x);ys.push(p.y);if(p.y2!==undefined&&p.y2!==null)ys.push(p.y2);});});
+  if(!ys.length)return emptyState("لا توجد قيم معتمدة","كل القراءات فى هذا النطاق رايات أو فراغات.");
+  var xmin=opts.xmin!==undefined?opts.xmin:Math.min.apply(null,xs);
+  var xmax=opts.xmax!==undefined?opts.xmax:Math.max.apply(null,xs);
+  if(xmax===xmin)xmax=xmin+1;
+  var ymin=Math.min.apply(null,ys),ymax=Math.max.apply(null,ys);
+  if(ymax-ymin<0.05){ymax+=0.05;ymin-=0.05;}
+  var pad=(ymax-ymin)*0.14;ymin-=pad;ymax+=pad;
+  function X(v){return padL+(W-padL-padR)*(v-xmin)/(xmax-xmin);}
+  function Y(v){return padT+(H-padT-padB)*(1-(v-ymin)/(ymax-ymin));}
+  var svg=svgNS("svg",{viewBox:"0 0 "+W+" "+H,"class":"chart",preserveAspectRatio:"none"});
   var i;
   for(i=0;i<=4;i++){
-    var v=mn+(mx-mn)*i/4, y=Y(v);
-    add("line",{x1:padL,x2:W-padR,y1:y,y2:y,stroke:"#e6e0d0","stroke-width":1});
-    add("text",{x:padL-8,y:y+4,"text-anchor":"end","font-size":11,fill:"#66736f","font-family":"IBM Plex Mono"},v.toFixed(2));
+    var gv=ymin+(ymax-ymin)*i/4,gy=Y(gv);
+    svg.appendChild(svgNS("line",{x1:padL,x2:W-padR,y1:gy,y2:gy,stroke:"#e6e0d0","stroke-width":1}));
+    svg.appendChild(svgNS("text",{x:padL-8,y:gy+4,"text-anchor":"end","font-size":11,fill:"#66736f",
+      "font-family":"IBM Plex Mono"},gv.toFixed(opts.yd===undefined?2:opts.yd)));
   }
-  var step=Math.max(1,Math.ceil(n/6));
-  for(i=0;i<n;i+=step){
-    add("text",{x:X(i),y:H-18,"text-anchor":"middle","font-size":10,fill:"#66736f"},labels[i]);
+  var ticks=opts.ticks||6;
+  for(i=0;i<=ticks;i++){
+    var tv=xmin+(xmax-xmin)*i/ticks;
+    svg.appendChild(svgNS("text",{x:X(tv),y:H-20,"text-anchor":"middle","font-size":10,fill:"#66736f"},
+      opts.xfmt?opts.xfmt(tv):tv.toFixed(0)));
+  }
+  if(opts.band){
+    var yb1=Y(opts.band[1]),yb2=Y(opts.band[0]);
+    svg.appendChild(svgNS("rect",{x:padL,y:yb1,width:W-padL-padR,height:Math.max(1,yb2-yb1),
+      fill:"#4d7c5a14"}));
   }
   var cols=["#247ba0","#b46f4b","#4d7c5a","#c58a2f","#8a6bbf"];
   series.forEach(function(s,si){
-    var dstr="",open=false;
-    s.pts.forEach(function(p,idx){
-      if(p.v===null){ open=false; return; }
-      dstr+=(open?"L":"M")+X(idx).toFixed(1)+" "+Y(p.v).toFixed(1)+" ";
-      open=true;
-    });
-    if(dstr)add("path",{d:dstr,fill:"none",stroke:s.color||cols[si%cols.length],"stroke-width":2,
-      "stroke-linejoin":"round","stroke-linecap":"round"});
-    if(opts.marks!==false){
-      s.pts.forEach(function(p,idx){
-        if(p.v===null)return;
-        if(p.flag)add("circle",{cx:X(idx),cy:Y(p.v),r:3.2,fill:"#b8503f"});
-      });
+    var col=s.color||cols[si%cols.length],d="",open=false;
+    if(s.bandOf){
+      var up="",dn2="",first=true;
+      s.pts.forEach(function(p){
+        if(p.y===null)return;
+        up+=(first?"M":"L")+X(p.x).toFixed(1)+" "+Y(p.y+p.sd).toFixed(1)+" ";
+        first=false;});
+      var rev=s.pts.slice().reverse();
+      rev.forEach(function(p){if(p.y===null)return;
+        dn2+="L"+X(p.x).toFixed(1)+" "+Y(p.y-p.sd).toFixed(1)+" ";});
+      if(up)svg.appendChild(svgNS("path",{d:up+dn2+"Z",fill:col+"22",stroke:"none"}));
     }
+    s.pts.forEach(function(p){
+      if(p.y===null||p.y===undefined){open=false;return;}
+      d+=(open?"L":"M")+X(p.x).toFixed(1)+" "+Y(p.y).toFixed(1)+" ";open=true;});
+    if(d){var at={d:d,fill:"none",stroke:col,"stroke-width":2,"stroke-linejoin":"round","stroke-linecap":"round"};
+      if(s.dash)at["stroke-dasharray"]="6 4";
+      svg.appendChild(svgNS("path",at));}
+    if(s.marks!==false)s.pts.forEach(function(p){
+      if(p.y===null||p.y===undefined)return;
+      if(p.flag)svg.appendChild(svgNS("circle",{cx:X(p.x),cy:Y(p.y),r:3.4,fill:"#b8503f"}));
+      else if(s.dots)svg.appendChild(svgNS("circle",{cx:X(p.x),cy:Y(p.y),r:3,fill:col}));
+    });
+    if(s.labels)s.pts.forEach(function(p){
+      if(p.y===null||!p.label)return;
+      svg.appendChild(svgNS("text",{x:X(p.x),y:Y(p.y)-9,"text-anchor":"middle","font-size":9.5,
+        fill:"#4c5854"},p.label));});
   });
-  var box=el("div",{"class":"chartbox"});
-  box.appendChild(svg);
+  if(opts.xtitle)svg.appendChild(svgNS("text",{x:(padL+W-padR)/2,y:H-4,"text-anchor":"middle",
+    "font-size":10,fill:"#66736f"},opts.xtitle));
+  if(opts.ytitle)svg.appendChild(svgNS("text",{x:14,y:padT+10,"font-size":10,fill:"#66736f"},opts.ytitle));
+  var box=el("div",{"class":"chartbox"});box.appendChild(svg);
   var lg=el("div",{"class":"legend"});
   series.forEach(function(s,si){
-    lg.appendChild(el("span",{html:'<i style="background:'+(s.color||cols[si%cols.length])+'"></i>'+s.name}));
-  });
+    lg.appendChild(el("span",{html:'<i style="background:'+(s.color||cols[si%cols.length])+'"></i>'+s.name}));});
+  if(opts.legendExtra)lg.appendChild(el("span",{html:opts.legendExtra}));
   box.appendChild(lg);
   return box;
 }
+function bars(items,opts){
+  opts=opts||{};
+  var W=920,H=opts.h||250,padL=54,padR=16,padT=14,padB=52;
+  if(!items.length)return emptyState("لا توجد بيانات","");
+  var mx=Math.max.apply(null,items.map(function(i){return i.v;}));
+  if(mx<=0)mx=1;
+  var svg=svgNS("svg",{viewBox:"0 0 "+W+" "+H,"class":"chart",preserveAspectRatio:"none"});
+  var i,gv,gy;
+  for(i=0;i<=4;i++){gv=mx*i/4;gy=padT+(H-padT-padB)*(1-i/4);
+    svg.appendChild(svgNS("line",{x1:padL,x2:W-padR,y1:gy,y2:gy,stroke:"#e6e0d0","stroke-width":1}));
+    svg.appendChild(svgNS("text",{x:padL-8,y:gy+4,"text-anchor":"end","font-size":11,fill:"#66736f",
+      "font-family":"IBM Plex Mono"},gv.toFixed(opts.yd===undefined?1:opts.yd)));}
+  var bw=(W-padL-padR)/items.length;
+  items.forEach(function(it,k){
+    var h=(H-padT-padB)*(it.v/mx),x=padL+bw*k+bw*0.18,w=bw*0.64;
+    svg.appendChild(svgNS("rect",{x:x,y:padT+(H-padT-padB)-h,width:w,height:Math.max(1,h),
+      fill:it.color||"#9fc0d4",rx:3}));
+    svg.appendChild(svgNS("text",{x:x+w/2,y:padT+(H-padT-padB)-h-5,"text-anchor":"middle",
+      "font-size":9.5,fill:"#4c5854","font-family":"IBM Plex Mono"},it.v.toFixed(opts.vd===undefined?1:opts.vd)));
+    svg.appendChild(svgNS("text",{x:x+w/2,y:H-30,"text-anchor":"middle","font-size":9,fill:"#66736f"},it.label));
+    if(it.label2)svg.appendChild(svgNS("text",{x:x+w/2,y:H-18,"text-anchor":"middle","font-size":8.5,
+      fill:"#8b948f"},it.label2));
+  });
+  var box=el("div",{"class":"chartbox"});box.appendChild(svg);return box;
+}
 
-/* ---------------- الأقسام ---------------- */
+/* ============ الأقسام ============ */
 var SECTIONS=[
-  {id:"command", icon:"⌂", eyebrow:"الحالة اللحظية", title:"غرفة المراقبة"},
-  {id:"quality", icon:"⚠", eyebrow:"كشف الأعطال", title:"جودة البيانات والأعطال"},
-  {id:"trends",  icon:"∿", eyebrow:"الاتجاهات", title:"المنحنيات الساعية"},
-  {id:"pumps",   icon:"⚙", eyebrow:"التشغيل", title:"ساعات تشغيل الطلمبات"},
-  {id:"alerts",  icon:"⚑", eyebrow:"الحدود", title:"تنبيهات تجاوز الحدود"},
-  {id:"flags",   icon:"☰", eyebrow:"السجل", title:"سجل الرايات"}
+  {id:"canal",  icon:"≋", eyebrow:"استعلام بالترعة", title:"لوحة الترعة"},
+  {id:"point",  icon:"◉", eyebrow:"استعلام بالنقطة", title:"لوحة النقطة"},
+  {id:"alerts", icon:"⚑", eyebrow:"الشواذ والأعطال", title:"التنبيهات"},
+  {id:"pumps",  icon:"⚙", eyebrow:"التشغيل", title:"الطلمبات"},
+  {id:"export", icon:"⤓", eyebrow:"البيانات التاريخية", title:"التنزيل"},
+  {id:"quality",icon:"✓", eyebrow:"جودة المصدر", title:"سلامة البيانات"}
 ];
-var CUR="command";
+var CUR="canal";
+var SEL={canal:"ترعة الإسماعيلية",point:null,date:null,days:14};
 
 function buildNav(){
-  var nav=q("nav"); nav.innerHTML="";
+  var n=q("nav");n.innerHTML="";
   SECTIONS.forEach(function(s,i){
-    var b=el("button",{"data-id":s.id},[
-      el("span",{"class":"nav-icon"},[s.icon]),
-      el("span",{},[s.title]),
-      el("span",{"class":"nav-num"},[("0"+(i+1)).slice(-2)])
-    ]);
-    b.onclick=function(){ selectSection(s.id); };
-    nav.appendChild(b);
-  });
+    var b=el("button",{"data-id":s.id},[el("span",{"class":"nav-icon"},[s.icon]),
+      el("span",{},[s.title]),el("span",{"class":"nav-num"},[("0"+(i+1)).slice(-2)])]);
+    b.onclick=function(){go(s.id);};n.appendChild(b);});
 }
-function selectSection(id){
-  var sec=null; SECTIONS.forEach(function(s){ if(s.id===id)sec=s; });
-  if(!sec)return;
-  CUR=id;
-  var btns=document.querySelectorAll("#nav button");
-  for(var i=0;i<btns.length;i++)btns[i].classList.toggle("active",btns[i].getAttribute("data-id")===id);
-  q("tb-eyebrow").textContent=sec.eyebrow;
-  q("tb-title").textContent=sec.title;
+function go(id){
+  var sec=null;SECTIONS.forEach(function(s){if(s.id===id)sec=s;});
+  if(!sec)return;CUR=id;
+  var bs=document.querySelectorAll("#nav button");
+  for(var i=0;i<bs.length;i++)bs[i].classList.toggle("active",bs[i].getAttribute("data-id")===id);
+  q("tb-eyebrow").textContent=sec.eyebrow;q("tb-title").textContent=sec.title;
   render();
 }
 function mobileNav(){
   var s=el("select");
-  SECTIONS.forEach(function(x){
-    var o=el("option",{value:x.id},[x.title]);
-    if(x.id===CUR)o.setAttribute("selected","selected");
-    s.appendChild(o);
-  });
-  s.onchange=function(){ selectSection(s.value); };
+  SECTIONS.forEach(function(x){var o=el("option",{value:x.id},[x.title]);
+    if(x.id===CUR)o.setAttribute("selected","selected");s.appendChild(o);});
+  s.onchange=function(){go(s.value);};
   return el("div",{"class":"mobsel"},[el("label",{"class":"fl"},["القسم"]),s]);
 }
+function canals(){
+  var m={};SITES.forEach(function(s){(m[s.canal]=m[s.canal]||[]).push(s);});
+  return m;
+}
 
-/* --------- 1) غرفة المراقبة --------- */
-function secCommand(c){
-  var tot=0,ok=0,bad=0,sitesBad=0,worst=null;
-  SITES.forEach(function(s){
-    var st=STATS[s.id]; tot+=st.n; ok+=st.ok;
-    bad+=st.f777+st.f888+st.f5+st.neg;
-    if(st.health<0.9)sitesBad++;
-    if(!worst||st.health<STATS[worst.id].health)worst=s;
+/* -------- 1) لوحة الترعة -------- */
+function secCanal(c){
+  var map=canals(),names=Object.keys(map);
+  if(names.indexOf(SEL.canal)<0)SEL.canal=names[0];
+  var list=map[SEL.canal]||[];
+  if(SEL.date===null)SEL.date=MAXDI;
+
+  var selC=el("select");
+  names.forEach(function(n){var o=el("option",{value:n},[n+" ("+map[n].length+" نقطة)"]);
+    if(n===SEL.canal)o.setAttribute("selected","selected");selC.appendChild(o);});
+  selC.onchange=function(){SEL.canal=selC.value;render();};
+  var inD=el("input",{type:"date",value:dayStr(SEL.date),min:dayStr(0),max:dayStr(MAXDI)});
+  inD.onchange=function(){var v=diOf(inD.value);
+    if(!isNaN(v)&&v>=0&&v<=MAXDI){SEL.date=v;render();}};
+
+  c.appendChild(panel("الاستعلام","اختر الترعة والتاريخ",null,[
+    el("div",{"class":"grid g2",style:"margin-top:12px"},[
+      el("div",{},[el("label",{"class":"fl"},["الترعة"]),selC]),
+      el("div",{},[el("label",{"class":"fl"},["التاريخ"]),inD])])]));
+
+  /* بطاقة الترعة */
+  var withKm=list.filter(function(s){return kmFor(s)!==null;});
+  var kms=withKm.map(function(s){return kmFor(s);});
+  var lenTxt=kms.length>1?(Math.max.apply(null,kms)-Math.min.apply(null,kms)).toFixed(1)+" كم":"—";
+  var dirs={};list.forEach(function(s){dirs[DIRNAME[s.dir]||s.dir]=1;});
+  var g=el("div",{"class":"grid g6",style:"margin-top:14px"},[
+    field("التاريخ",dayStr(SEL.date)),
+    field("اسم الترعة",SEL.canal,true),
+    field("عدد نقاط التليمترى",String(list.length),true),
+    field("مدى الترقيم",lenTxt),
+    field("الإدارات",Object.keys(dirs).join(" · ")),
+    field("نقاط بلا كيلومتر",String(list.length-withKm.length))
+  ]);
+  c.appendChild(panel("بطاقة الترعة","بيانات عامة",null,[g,
+    el("div",{"class":"note"},["«مدى الترقيم» هو الفارق بين أصغر وأكبر كيلومتر معروف، لا طول الترعة الفعلى — الطول لا يرد فى مصدر التليمترى."])]));
+
+  /* المخطط الطولى */
+  var prof=[];
+  withKm.forEach(function(s){
+    var day=s.rows.filter(function(r){return r.di===SEL.date;});
+    var vals=day.filter(function(r){return r.up!==null&&!isBad(r.up)&&r.up>0;}).map(function(r){return r.up;});
+    var v=vals.length?mean(vals):null;
+    var flagged=day.some(function(r){return isBad(r.up);});
+    prof.push({x:kmFor(s),y:v,flag:flagged,label:s.name.slice(0,14),name:s.name,n:vals.length});
   });
-  c.appendChild(el("div",{"class":"grid g4"},[
-    kpi("≋","","مواقع مرصودة",String(SITES.length),"موقع","٤ إدارات"),
-    kpi("☷","","قراءات الأرشيف",String(tot),"قراءة",dayStr(0)+" ← "+dayStr(MAXDI)),
-    kpi("⚠",bad?"bad":"green","قراءات معطوبة",String(bad),"قراءة",(100*bad/tot).toFixed(1)+"٪ من الإجمالى"),
-    kpi("◉",sitesBad?"sand":"green","مواقع دون ٩٠٪ سلامة",String(sitesBad),"موقع",worst?("الأضعف: "+worst.name):"")
-  ]));
-
-  var live=panel("البث الحى","آخر قراءات الجالب");
-  if(LIVE.loading){ live.appendChild(el("div",{"class":"grid g3",style:"margin-top:12px"},
-      [el("div",{"class":"skel"}),el("div",{"class":"skel"}),el("div",{"class":"skel"})])); }
-  else if(LIVE.err){
-    live.appendChild(emptyState("تعذّر الاتصال بقاعدة البيانات",
-      "السبب: "+LIVE.err+" — تحقّق من الشبكة ثم أعد المحاولة. الأرشيف المضمّن يعمل بلا اتصال.",
-      "إعادة المحاولة",function(){ loadLive().then(render); }));
-  } else if(!LIVE.wl){
-    live.appendChild(emptyState("لا توجد بيانات حية بعد",
-      "جالب البيانات (Apps Script) لم يكتب فى القاعدة حتى الآن. شغّل pullHourly مرة واحدة ثم حدّث.",
-      "تحديث",function(){ loadLive().then(render); }));
-  } else {
-    live.appendChild(el("div",{"class":"rowflex",style:"margin-top:10px"},[
-      stampEl(LIVE.wl.updatedAt),
-      el("span",{"class":"pill lake"},["تاريخ القراءة: "+(LIVE.wl.date||"—")])
+  prof.sort(function(a,b){return a.x-b.x;});
+  var pnl=panel("المخطط الطولى","منسوب سطح الماء مقابل المسافة من المأخذ",
+    dayStr(SEL.date)+" — متوسط اليوم عند كل نقطة");
+  if(prof.filter(function(p){return p.y!==null;}).length<2){
+    pnl.appendChild(emptyState("لا يكفى لرسم مقطع طولى",
+      "يلزم نقطتان على الأقل لهما كيلومتر معروف وقراءة سليمة فى هذا اليوم."));
+  }else{
+    pnl.appendChild(chart([{name:"منسوب الأمام",pts:prof,color:"#247ba0",dots:true,labels:true}],
+      {xtitle:"المسافة من المأخذ (كم)",ytitle:"المنسوب (م)",yd:2,ticks:6,
+       xfmt:function(v){return v.toFixed(0);}}));
+    var slope=null;
+    var pv=prof.filter(function(p){return p.y!==null;});
+    if(pv.length>1){
+      var dx=pv[pv.length-1].x-pv[0].x,dy=pv[0].y-pv[pv.length-1].y;
+      if(dx>0)slope=dy/dx;
+    }
+    pnl.appendChild(el("div",{"class":"grid g3",style:"margin-top:14px"},[
+      kpi("↧","","أعلى منسوب",fx(Math.max.apply(null,pv.map(function(p){return p.y;})),3),"م",pv[0].name),
+      kpi("↥","","أدنى منسوب",fx(Math.min.apply(null,pv.map(function(p){return p.y;})),3),"م",
+        pv[pv.length-1].name),
+      kpi("∠",slope&&slope<0?"sand":"","متوسط الميل",slope===null?"—":(slope*1000).toFixed(2),"م/كم ×١٠⁻³",
+        slope!==null&&slope<0?"ارتفاع باتجاه المصب — راجع الكيلومترات":"انحدار طبيعى")
     ]));
-    var rows=[];
-    var s2=LIVE.wl.sites||{};
-    for(var k in s2){
-      var v=s2[k];
-      rows.push({flag:v.flagged||v.suspect,cells:[v.name||k,v.hour===null||v.hour===undefined?"—":v.hour,
-        v.up===null?"—":fx(v.up,3),v.dn===null?"—":fx(v.dn,3),
-        v.flagged?"راية":(v.suspect?"مشكوك":"سليم")]});
-    }
-    if(rows.length)live.appendChild(tbl(["الموقع","الساعة","الأمام (م)","الخلف (م)","الحالة"],rows));
-    else live.appendChild(emptyState("البث فارغ","القاعدة بها عقدة حية بلا مواقع."));
   }
-  c.appendChild(live);
+  var noKm=list.filter(function(s){return kmFor(s)===null;});
+  if(noKm.length){
+    var box=el("div",{style:"margin-top:14px"});
+    box.appendChild(el("div",{"class":"note"},
+      ["نقاط لا يرد كيلومترها فى اسمها — أدخله ليظهر على المخطط (يُحفظ على جهازك وفى القاعدة):"]));
+    var gg=el("div",{"class":"grid g3",style:"margin-top:10px"});
+    noKm.forEach(function(s){
+      var inp=el("input",{type:"number",step:"0.1",placeholder:"كم",
+        value:USER.km[s.id]!==undefined?USER.km[s.id]:""});
+      inp.onchange=function(){USER.km[s.id]=inp.value===""?null:parseFloat(inp.value);};
+      gg.appendChild(el("div",{},[el("label",{"class":"fl"},[s.name]),inp]));});
+    box.appendChild(gg);
+    var b=el("button",{"class":"btn solid"},["حفظ الكيلومترات"]);
+    b.onclick=function(){saveUser();render();};
+    box.appendChild(el("div",{"class":"actions"},[b]));
+    pnl.appendChild(box);
+  }
+  c.appendChild(pnl);
 
-  var lastRows=[];
-  SITES.forEach(function(s){
-    var st=STATS[s.id]; var L=st.last;
-    if(!L)return;
-    lastRows.push({flag:isBad(L.up)||isBad(L.dn),cells:[s.name,DIRNAME[s.dir],dayStr(L.di)+" "+L.h+":00",
-      isBad(L.up)?"راية":fx(L.up,3), L.dn===null?"—":(isBad(L.dn)?"راية":fx(L.dn,3)),
-      (L.up!==null&&L.dn!==null&&!isBad(L.up)&&!isBad(L.dn))?fx(L.up-L.dn,3):"—"]});
-  });
-  c.appendChild(panel("من الأرشيف المضمّن","آخر قراءة مسجّلة لكل موقع",[
-    tbl(["الموقع","الإدارة","التوقيت","الأمام (م)","الخلف (م)","الفرق (م)"],lastRows),
-    el("div",{"class":"note"},["الفرق = الأمام ناقص الخلف عند المنشآت ذات الحسّاسين — لا يُحسب حين يغيب أحدهما أو يكون راية."])
-  ]));
-}
+  /* فرق المنسوب بين النقاط المتتالية */
+  var pv2=prof.filter(function(p){return p.y!==null;});
+  if(pv2.length>1){
+    var items=[];
+    for(var i=1;i<pv2.length;i++){
+      items.push({label:pv2[i-1].x.toFixed(0)+"←"+pv2[i].x.toFixed(0)+" كم",
+        label2:(pv2[i].x-pv2[i-1].x).toFixed(1)+" كم",
+        v:Math.max(0,pv2[i-1].y-pv2[i].y),
+        color:(pv2[i-1].y-pv2[i].y)<0?"#e0b8ae":"#9fc0d4"});}
+    c.appendChild(panel("الفاقد بين النقاط","هبوط المنسوب على كل قطاع",
+      "قيمة سالبة تعنى ارتفاعاً باتجاه المصب — غالباً كيلومتر خاطئ أو حسّاس منحرف",[
+      bars(items,{yd:2,vd:3}),
+      el("div",{"class":"note"},["هذا هبوط منسوب بالمتر، وليس فاقداً مائياً. حساب الفاقد يحتاج تصرفات، وهى غير متاحة على مصدر التليمترى."])]));
+  }
 
-/* --------- 2) جودة البيانات --------- */
-function secQuality(c){
+  /* التصرفات — غير متاحة */
+  c.appendChild(panel("التصرفات والاستهلاك","غير متاح من هذا المصدر",null,[
+    el("div",{"class":"note"},["مصدر التليمترى يعطى منسوب الأمام والخلف بالمتر فقط، ولا يعطى تصرفاً. لحساب التصرف يلزم أحد اثنين: منحنى تصريف معاير لكل نقطة، أو أبعاد المنشأ وفتحات البوابات. وحين تتوفّر أى منهما أُضيف المخطط بالتصرفات والاستهلاك المائى كما فى التصميم المرجعى — ولن أعرض رقماً مشتقّاً من فرض غير محقَّق."])]));
+
+  /* جدول نقاط الترعة */
   var rows=[];
-  SITES.forEach(function(s){
-    var st=STATS[s.id];
-    var pct=Math.round(st.health*100);
-    var cls=pct>=95?"":(pct>=85?"warn":"bad");
-    var bar=el("div",{"class":"rowflex"},[
-      el("div",{"class":"bar"},[el("i",{"class":cls,style:"width:"+pct+"%"})]),
-      el("span",{style:"font-family:var(--mono);font-size:11px"},[pct+"٪"])
-    ]);
-    rows.push({flag:pct<90,cells:[s.name,DIRNAME[s.dir],st.n,st.f777,st.f888,st.f5,st.neg,st.zero,bar]});
-  });
-  c.appendChild(panel("سلامة كل موقع","نسبة القراءات السليمة وعدّاد كل نوع عطل",[
-    tbl(["الموقع","الإدارة","القراءات","راية 777","راية 888","افتراضية 5.00","سالبة","صفرية","السلامة"],rows),
-    el("div",{"class":"note"},["التصنيف بأولوية واحدة لكل قراءة: 777 ثم 888 ثم 5.00 ثم السالب ثم الصفر. الأصفار محسوبة على حدة ولم تُحذف."])
-  ]));
-
-  var hm=el("div",{"class":"hm"});
-  for(var i=0;i<SITES.length;i++){
-    var s=SITES[i];
-    var cnt={};
-    s.rows.forEach(function(r){ cnt[r.di]=(cnt[r.di]||0)+1; });
-    var row=el("div",{"class":"hmrow"},[el("span",{"class":"hmlbl",title:s.name},[s.name])]);
-    for(var dI=0;dI<=MAXDI;dI++){
-      var n=cnt[dI]||0;
-      var col=n===0?"#efeadd":(n>=24?"#4d7c5a":(n>=12?"#c58a2f":(n>1?"#d9a441":"#b46f4b")));
-      row.appendChild(el("i",{style:"background:"+col,title:s.name+" — "+dayStr(dI)+" — "+n+" قراءة"}));
-    }
-    hm.appendChild(row);
-  }
-  c.appendChild(panel("التغطية اليومية","عدد القراءات المسجّلة لكل موقع فى كل يوم",[
-    hm,
-    el("div",{"class":"legend"},[
-      el("span",{html:'<i style="background:#4d7c5a"></i>٢٤ قراءة (تسجيل ساعى كامل)'}),
-      el("span",{html:'<i style="background:#c58a2f"></i>١٢ فأكثر'}),
-      el("span",{html:'<i style="background:#b46f4b"></i>قراءة واحدة (تسجيل يومى)'}),
-      el("span",{html:'<i style="background:#efeadd"></i>لا قراءة'})
-    ]),
-    el("div",{"class":"note"},["التسجيل قبل ١٥ يوليو ٢٠٢٦ كان قراءة واحدة يومياً الساعة ٢٣:٠٠ فقط — لذلك يظهر العمود الأيسر بلون واحد. أى متوسط يخلط الفترتين مضلِّل."])
-  ]));
-
-  var fault=faultBursts();
-  var frows=fault.map(function(f){
-    return {flag:true,cells:[dayStr(f.di)+" "+f.h+":00",f.count+" موقعاً","القيمة 5.00 بالضبط","عطل منظومى فى التسجيل"]};
-  });
-  c.appendChild(panel("العطل المنظومى","لحظات كتب فيها النظام قيمة واحدة فى مواقع متعددة",[
-    frows.length?tbl(["التوقيت","عدد المواقع","القيمة","التشخيص"],frows)
-      :emptyState("لا توجد لحظات عطل منظومى","لم تتكرر قيمة واحدة فى أكثر من ٣ مواقع فى نفس التوقيت."),
-    el("div",{"class":"note"},["تطابق ١٦ محطة على الرقم نفسه فى اللحظة نفسها لا يحدث هيدروليكياً — الأرجح قيمة افتراضية يكتبها النظام عند انقطاع الاتصال."])
-  ]));
-}
-function faultBursts(){
-  var map={};
-  SITES.forEach(function(s){
-    s.rows.forEach(function(r){
-      if(r.up===FAULT||r.dn===FAULT){
-        var k=r.di+"."+r.h;
-        map[k]=(map[k]||0)+1;
-      }
-    });
-  });
-  var out=[];
-  for(var k in map){
-    if(map[k]<3)continue;
-    var p=k.split(".");
-    out.push({di:parseInt(p[0],10),h:parseInt(p[1],10),count:map[k]});
-  }
-  out.sort(function(a,b){ return (b.di-a.di)||(b.h-a.h); });
-  return out;
+  list.forEach(function(s){
+    var day=s.rows.filter(function(r){return r.di===SEL.date;});
+    var ok=day.filter(function(r){return r.up!==null&&!isBad(r.up);});
+    var lastR=day.length?day[day.length-1]:null;
+    rows.push({bad:day.some(function(r){return isBad(r.up);}),
+      cells:[s.name,DIRNAME[s.dir]||s.dir,kmFor(s)===null?"—":fx(kmFor(s),1),
+        lastR?lastR.h+":00":"—",
+        lastR&&!isBad(lastR.up)?fx(lastR.up,3):(lastR?"راية":"—"),
+        lastR&&lastR.dn!==null&&!isBad(lastR.dn)?fx(lastR.dn,3):"—",
+        day.length,ok.length]});});
+  c.appendChild(panel("نقاط الترعة","حالة كل نقطة فى اليوم المختار",null,[
+    tbl(["الموقع","الإدارة","كم","آخر ساعة","الأمام (م)","الخلف (م)","قراءات","سليمة"],rows)]));
 }
 
-/* --------- 3) المنحنيات --------- */
-var TRSITE=null, TRDAYS=14, TRFIELD="up";
-function secTrends(c){
-  if(!TRSITE)TRSITE=SITES[0].id;
-  var selS=el("select");
-  SITES.forEach(function(s){
-    var o=el("option",{value:s.id},[s.name+" — "+DIRNAME[s.dir]]);
-    if(s.id===TRSITE)o.setAttribute("selected","selected");
-    selS.appendChild(o);
-  });
-  selS.onchange=function(){ TRSITE=selS.value; render(); };
+/* -------- 2) لوحة النقطة -------- */
+function secPoint(c){
+  if(!SEL.point)SEL.point=SITES[0].id;
+  var site=BYID[SEL.point],st=STATS[SEL.point];
+  var selP=el("select");
+  SITES.forEach(function(s){var o=el("option",{value:s.id},[s.name+" — "+s.canal]);
+    if(s.id===SEL.point)o.setAttribute("selected","selected");selP.appendChild(o);});
+  selP.onchange=function(){SEL.point=selP.value;render();};
   var selD=el("select");
   [[7,"آخر ٧ أيام"],[14,"آخر ١٤ يوماً"],[31,"آخر شهر"],[999,"كل الفترة"]].forEach(function(x){
     var o=el("option",{value:String(x[0])},[x[1]]);
-    if(x[0]===TRDAYS)o.setAttribute("selected","selected");
-    selD.appendChild(o);
-  });
-  selD.onchange=function(){ TRDAYS=parseInt(selD.value,10); render(); };
-
-  var site=BYID[TRSITE], st=STATS[TRSITE];
-  var from=Math.max(0,MAXDI-TRDAYS+1);
-  var rows=site.rows.filter(function(r){ return r.di>=from; });
-  var labels=[], up=[], dn=[];
-  rows.forEach(function(r){
-    labels.push(r.h===0?dayStr(r.di).slice(5):(r.h+":00"));
-    var uv=isBad(r.up)?null:r.up, dv=isBad(r.dn)?null:r.dn;
-    up.push({v:uv,flag:isBad(r.up)});
-    dn.push({v:dv,flag:isBad(r.dn)});
-  });
-  var hasDn=dn.some(function(p){ return p.v!==null; });
-  var series=[{name:"الأمام",pts:up,color:"#247ba0"}];
-  if(hasDn)series.push({name:"الخلف",pts:dn,color:"#b46f4b"});
-
-  c.appendChild(panel("اختيار العرض","الموقع والفترة",[
+    if(x[0]===SEL.days)o.setAttribute("selected","selected");selD.appendChild(o);});
+  selD.onchange=function(){SEL.days=parseInt(selD.value,10);render();};
+  c.appendChild(panel("الاستعلام","اختر النقطة والفترة",null,[
     el("div",{"class":"grid g2",style:"margin-top:12px"},[
-      el("div",{},[el("label",{"class":"fl"},["الموقع"]),selS]),
-      el("div",{},[el("label",{"class":"fl"},["الفترة"]),selD])
-    ])
+      el("div",{},[el("label",{"class":"fl"},["النقطة"]),selP]),
+      el("div",{},[el("label",{"class":"fl"},["الفترة"]),selD])])]));
+
+  /* كود النقطة */
+  var code=serialOf(site);
+  var sp=panel("كود النقطة","التركيب الكودى المقترح",
+    "لم يصدر ترميز رسمى للنقاط بعد — هذا اقتراح مبنى على مصدر التليمترى، عدّله عند صدور الترميز المعتمد");
+  sp.appendChild(el("div",{"class":"serial"},[el("b",{},[code])]));
+  sp.appendChild(el("div",{"class":"serial-legend"},[
+    el("span",{html:"<b>Ra</b> — بادئة المجرى"}),
+    el("span",{html:"<b>"+site.dir+"</b> — الإدارة المركزية"}),
+    el("span",{html:"<b>"+canalCode(site.canal)+"</b> — الترعة"}),
+    el("span",{html:"<b>"+(kmFor(site)===null?"0000":String(Math.round(kmFor(site)*10)).padStart(4,"0"))+"</b> — الكيلومتر ×١٠"})]));
+  c.appendChild(sp);
+
+  /* بيانات النقطة */
+  var L=st.last;
+  var liveRec=LIVE.wl&&LIVE.wl.sites?LIVE.wl.sites[site.id]:null;
+  c.appendChild(panel("بيانات النقطة","آخر قراءة",null,[
+    el("div",{"class":"grid g4",style:"margin-top:12px"},[
+      field("الموقع",site.name),
+      field("الإدارة",DIRNAME[site.dir]||site.dir),
+      field("الترعة",site.canal),
+      field("الكيلومتر",kmFor(site)===null?"—":fx(kmFor(site),1))]),
+    el("div",{"class":"grid g4",style:"margin-top:10px"},[
+      field("تاريخ آخر قراءة",L?dayStr(L.di):"—"),
+      field("الساعة",L?L.h+":00":"—"),
+      field("المنسوب الأمامى",L&&!isBad(L.up)?fx(L.up,3)+" م":"راية",true),
+      field("المنسوب الخلفى",L&&L.dn!==null&&!isBad(L.dn)?fx(L.dn,3)+" م":"—",true)]),
+    liveRec?el("div",{"class":"rowflex",style:"margin-top:12px"},[
+      stampEl(LIVE.wl.updatedAt),
+      el("span",{"class":"pill lake"},["البث الحى: "+
+        (liveRec.up===null?"راية":fx(liveRec.up,3)+" م")+" الساعة "+(liveRec.hour||"—")])]):
+      el("div",{"class":"note"},["لا توجد قراءة حية لهذه النقطة الآن — المعروض من الأرشيف المضمّن."])
   ]));
 
-  var stats2=(function(){
-    var v=[];
-    rows.forEach(function(r){ if(r.up!==null&&!isBad(r.up)&&r.up>0)v.push(r.up); });
-    if(!v.length)return null;
-    var mn=Math.min.apply(null,v), mx=Math.max.apply(null,v), s=0;
-    v.forEach(function(x){ s+=x; });
-    return {mn:mn,mx:mx,avg:s/v.length,n:v.length,range:mx-mn};
-  })();
-  c.appendChild(el("div",{"class":"grid g4",style:"margin-top:16px"},[
-    kpi("↧","","أدنى منسوب",stats2?fx(stats2.mn,3):"—","م","فى الفترة المعروضة"),
-    kpi("↥","","أعلى منسوب",stats2?fx(stats2.mx,3):"—","م",""),
-    kpi("≈","","المتوسط",stats2?fx(stats2.avg,3):"—","م",stats2?(stats2.n+" قراءة معتمدة"):""),
-    kpi("↕",stats2&&stats2.range>1?"sand":"green","المدى",stats2?fx(stats2.range,3):"—","م","أعلى ناقص أدنى")
-  ]));
+  /* منحنى المتوسط اليومى */
+  var from=Math.max(0,MAXDI-SEL.days+1);
+  var an=anomalies(site);
+  var dser=an.rows.filter(function(p){return p.di>=from;});
+  var pts=dser.map(function(p){return {x:p.di,y:p.v,
+    flag:an.list.some(function(a){return a.di===p.di;})};});
+  var pn=panel("المتوسط اليومى","منسوب الأمام — متوسط قراءات كل يوم",
+    dser.length+" يوماً معروضاً · النقاط الحمراء شواذ إحصائية");
+  pn.appendChild(chart([{name:"المتوسط اليومى",pts:pts,color:"#247ba0",dots:true}],
+    {xtitle:"التاريخ",ytitle:"المنسوب (م)",yd:2,ticks:5,
+     band:an.lo!==null?[an.lo,an.hi]:null,
+     xfmt:function(v){return dayStr(Math.round(v)).slice(5);},
+     legendExtra:'<i style="background:#4d7c5a33"></i>النطاق الطبيعى (±٣ انحرافات عن الوسيط)'}));
+  c.appendChild(pn);
 
-  c.appendChild(panel("منحنى المناسيب",site.name,[
-    lineChart(series,labels,{}),
-    el("div",{"class":"note"},["النقاط الحمراء مواضع رايات أُسقطت من الخط — الخط ينقطع عندها ولا يُوصَل، حتى لا يُخترع اتجاه غير موجود. عدد القراءات المعروضة: "+rows.length+"."])
-  ]));
+  /* الساعى */
+  var hourly=site.rows.filter(function(r){return r.di>=from;});
+  var hp=hourly.map(function(r,i){return {x:i,y:isBad(r.up)?null:r.up,flag:isBad(r.up)};});
+  var hd=hourly.map(function(r){return dayStr(r.di).slice(5)+" "+r.h;});
+  c.appendChild(panel("القراءات الساعية","التفصيل ساعة بساعة",
+    hourly.length+" قراءة — الخط ينقطع عند الراية ولا يُوصَل",[
+    chart([{name:"الأمام",pts:hp,color:"#155b75"}],
+      {xtitle:"القراءات بالترتيب الزمنى",ytitle:"المنسوب (م)",yd:2,ticks:6,
+       xfmt:function(v){var i=Math.round(v);return hd[i]||"";}})]));
+
+  /* التنبؤ */
+  var fc=forecast(site,14,7);
+  var fp=panel("التنبؤ","سبعة أيام قادمة — انحدار خطى إحصائى",
+    "ليس نموذجاً هيدروليكياً: لا يعرف بوابات ولا تصرفات ولا برنامج مناوبات");
+  if(!fc){fp.appendChild(emptyState("لا يكفى للتنبؤ","يلزم خمسة أيام على الأقل من المتوسطات اليومية."));}
+  else{
+    var hpts=fc.hist.map(function(p){return {x:p.di,y:p.v};});
+    var ppts=fc.pred.map(function(p){return {x:p.di,y:p.v,sd:p.sd};});
+    ppts.unshift({x:fc.hist[fc.hist.length-1].di,y:fc.hist[fc.hist.length-1].v,sd:fc.sd});
+    fp.appendChild(chart([
+      {name:"مقيس",pts:hpts,color:"#247ba0",dots:true},
+      {name:"متنبأ به",pts:ppts,color:"#b46f4b",dash:true,dots:true,bandOf:true}],
+      {xtitle:"التاريخ",ytitle:"المنسوب (م)",yd:2,ticks:6,
+       xfmt:function(v){return dayStr(Math.round(v)).slice(5);},
+       legendExtra:"النطاق المظلّل = ±انحراف البواقى"}));
+    var tr=fc.slope*7;
+    fp.appendChild(el("div",{"class":"grid g3",style:"margin-top:14px"},[
+      kpi("→",Math.abs(tr)>0.05?"sand":"green","الاتجاه المتوقع",(tr>=0?"+":"")+fx(tr,3),"م / ٧ أيام",
+        Math.abs(tr)<0.02?"مستقر عملياً":(tr>0?"ارتفاع":"انخفاض")),
+      kpi("±","","عدم اليقين","±"+fx(fc.sd*1.96,3),"م","نطاق ٩٥٪ من تشتت البواقى"),
+      kpi("◷","","أساس التنبؤ",String(fc.hist.length),"يوم","المتوسطات اليومية الأخيرة")]));
+    fp.appendChild(tbl(["اليوم","المنسوب المتوقع (م)","الحد الأدنى","الحد الأقصى"],
+      fc.pred.map(function(p){return {cells:[dayStr(p.di),fx(p.v,3),
+        fx(p.v-1.96*p.sd,3),fx(p.v+1.96*p.sd,3)]};})));
+  }
+  c.appendChild(fp);
+}
+function canalCode(n){
+  var m={"ترعة الإسماعيلية":"ISM","ترعة السويس":"SUZ","ترعة بورسعيد":"PRT","ترعة الصالحية":"SAL"};
+  return m[n]||"GEN";
+}
+function serialOf(s){
+  var km=kmFor(s);
+  return "Ra-"+("0"+s.dir).slice(-2)+"-"+canalCode(s.canal)+"-"+
+    (km===null?"0000":String(Math.round(km*10)).padStart(4,"0"));
 }
 
-/* --------- 4) الطلمبات --------- */
+/* -------- 3) التنبيهات -------- */
+function secAlerts(c){
+  var all=[];
+  SITES.forEach(function(s){
+    var an=anomalies(s);
+    an.list.forEach(function(a){all.push({t:"شذوذ",site:s,di:a.di,txt:a.dir+" غير معتاد — المتوسط "+fx(a.v,3)+" م"});});
+    zeroDays(s).forEach(function(z){all.push({t:"أصفار",site:s,di:z.di,txt:z.n+" قراءة صفرية"});});
+    var byDay={};
+    s.rows.forEach(function(r){var f=flagOf(r.up)||flagOf(r.dn);
+      if(f){var k=r.di+"|"+f;byDay[k]=(byDay[k]||0)+1;}});
+    Object.keys(byDay).forEach(function(k){
+      var p=k.split("|");
+      all.push({t:"راية",site:s,di:parseInt(p[0],10),txt:p[1]+" ×"+byDay[k]});});
+  });
+  all.sort(function(a,b){return b.di-a.di;});
+  var cnt={"شذوذ":0,"أصفار":0,"راية":0};
+  all.forEach(function(a){cnt[a.t]++;});
+
+  c.appendChild(el("div",{"class":"grid g4"},[
+    kpi("⚑",cnt["شذوذ"]?"sand":"green","شواذ إحصائية",String(cnt["شذوذ"]),"يوم·موقع","خارج ±٣ انحرافات"),
+    kpi("⊘",cnt["أصفار"]?"bad":"green","أيام بأصفار",String(cnt["أصفار"]),"يوم·موقع","حسّاس متوقف غالباً"),
+    kpi("⚠",cnt["راية"]?"bad":"green","رايات",String(cnt["راية"]),"يوم·موقع","777 · 888 · 5.00 · سالب"),
+    kpi("◉","","مواقع مرصودة",String(SITES.length),"موقع",dayStr(0)+" ← "+dayStr(MAXDI))
+  ]));
+
+  var recent=all.slice(0,14);
+  var rp=panel("أحدث التنبيهات","آخر ما رُصد",null,[]);
+  if(!recent.length)rp.appendChild(emptyState("لا توجد تنبيهات","كل القراءات داخل النطاق الطبيعى."));
+  recent.forEach(function(a){
+    rp.appendChild(el("div",{"class":"alert-row"+(a.t==="شذوذ"?" warn":"")},[
+      el("b",{},[dayStr(a.di)]),el("span",{},[a.site.name+" — "+a.txt])]));});
+  c.appendChild(rp);
+
+  c.appendChild(panel("السجل الكامل",all.length+" تنبيهاً",null,[
+    tbl(["التاريخ","الموقع","الترعة","النوع","التفصيل"],all.slice(0,400).map(function(a){
+      return {bad:a.t!=="شذوذ",cells:[dayStr(a.di),a.site.name,a.site.canal,a.t,a.txt]};})),
+    el("div",{"class":"actions"},[(function(){
+      var b=el("button",{"class":"btn sm"},["تصدير CSV"]);
+      b.onclick=function(){csv("تنبيهات",["التاريخ","الموقع","الترعة","النوع","التفصيل"],
+        all.map(function(a){return [dayStr(a.di),a.site.name,a.site.canal,a.t,a.txt];}));};
+      return b;})()]),
+    el("div",{"class":"note"},["الشواذ محسوبة بانحراف الوسيط المطلق (MAD) على المتوسط اليومى — طريقة لا تتأثر بالقيم المتطرفة نفسها، بخلاف الانحراف المعيارى."])]));
+}
+
+/* -------- 4) الطلمبات -------- */
 function secPumps(c){
-  var p=panel("البث الحى","ساعات تشغيل الوحدات وتصرفاتها");
-  if(LIVE.loading){ p.appendChild(el("div",{"class":"skel",style:"margin-top:12px;height:120px"})); }
-  else if(LIVE.err){
-    p.appendChild(emptyState("تعذّر الاتصال بقاعدة البيانات","السبب: "+LIVE.err,
-      "إعادة المحاولة",function(){ loadLive().then(render); }));
-  } else if(!LIVE.pump||!LIVE.pump.stations){
+  var p=panel("البث الحى","ساعات تشغيل الوحدات وتصرفاتها",
+    "المصدر: نقطة getdatapump عبر وسيط Supabase — ليست جزءاً من الأرشيف التاريخى");
+  if(LIVE.loading){p.appendChild(el("div",{"class":"skel",style:"margin-top:12px;height:110px"}));}
+  else if(LIVE.err){p.appendChild(emptyState("تعذّر الاتصال بالقاعدة","السبب: "+LIVE.err,
+    "إعادة المحاولة",function(){loadLive().then(render);}));}
+  else if(!LIVE.pump||!LIVE.pump.stations){
     p.appendChild(emptyState("لا توجد بيانات طلمبات بعد",
-      "ساعات التشغيل تأتى من نقطة getdatapump عبر الجالب، وهى ليست جزءاً من الأرشيف التاريخى — شغّل الجالب مرة واحدة.",
-      "تحديث",function(){ loadLive().then(render); }));
-  } else {
-    p.appendChild(el("div",{"class":"rowflex",style:"margin-top:10px"},[stampEl(LIVE.pump.updatedAt)]));
-    var st=LIVE.pump.stations, cards=el("div",{"class":"grid g4",style:"margin-top:14px"}), rows=[];
+      "الوسيط لم يكتب فى القاعدة بعد — يعمل تلقائياً كل ساعة.","تحديث",
+      function(){loadLive().then(render);}));}
+  else{
+    p.appendChild(el("div",{"class":"rowflex",style:"margin-top:10px"},[stampEl(LIVE.pump.updatedAt),
+      el("span",{"class":"pill lake"},["تاريخ: "+(LIVE.pump.date||"—")])]));
+    var st=LIVE.pump.stations,cards=el("div",{"class":"grid g4",style:"margin-top:14px"}),rows=[];
     for(var k in st){
       var s=st[k];
-      cards.appendChild(kpi("⚙",s.unitsRunning?"green":"sand",s.name||k,
-        fx(s.totalHours,1),"ساعة",(s.unitsRunning||0)+" وحدة عاملة · تصرف "+fx(s.totalQ,3)+" م³/ث"));
+      cards.appendChild(kpi("⚙",s.unitsRunning?"green":"sand",s.name||k,fx(s.totalHours,1),"ساعة",
+        (s.unitsRunning||0)+" وحدة عاملة · "+fx(s.totalQ,3)+" م³/ث"));
       for(var u=1;u<=10;u++){
-        var e=s.units&&s.units["u"+u];
-        if(!e)continue;
-        rows.push({flag:(e.hours===0),cells:[s.name||k,"الوحدة "+u,
+        var e=s.units&&s.units["u"+u];if(!e)continue;
+        rows.push({bad:e.hours===0,cells:[s.name||k,"الوحدة "+u,
           e.hours===null||e.hours===undefined?"—":fx(e.hours,2),
-          e.q===null||e.q===undefined?"—":fx(e.q,3),
-          e.hours>0?"عاملة":"متوقفة"]});
-      }
+          e.q===null||e.q===undefined?"—":fx(e.q,3),e.hours>0?"عاملة":"متوقفة"]});}
     }
     p.appendChild(cards);
     if(rows.length)p.appendChild(tbl(["المحطة","الوحدة","ساعات التشغيل","التصرف (م³/ث)","الحالة"],rows));
   }
   c.appendChild(p);
-  c.appendChild(panel("ملاحظة","مصدر البيانات",[
-    el("div",{"class":"note"},["ساعات التشغيل والتصرفات متاحة على تطبيق التليمترى لخمس محطات فقط: الصالحية١ · الشلوفة · الشباب١ · المحسمة ١ و٢. لا يوجد لها أرشيف تاريخى على النقطة، فالمعروض هو آخر ما جلبه الجالب."])
-  ]));
 }
 
-/* --------- 5) التنبيهات والحدود --------- */
-function secAlerts(c){
-  var breaches=[];
-  SITES.forEach(function(s){
-    var L=STATS[s.id].last, lim=LIMITS[s.id];
-    if(!L||!lim)return;
-    var v=isBad(L.up)?null:L.up;
-    if(v===null)return;
-    if(lim.min!==null&&lim.min!==undefined&&v<lim.min)
-      breaches.push({s:s,v:v,lim:lim.min,kind:"أقل من الحد الأدنى",L:L});
-    if(lim.max!==null&&lim.max!==undefined&&v>lim.max)
-      breaches.push({s:s,v:v,lim:lim.max,kind:"أعلى من الحد الأقصى",L:L});
-  });
-  var setCount=0;
-  for(var k in LIMITS){ if(LIMITS[k]&&(LIMITS[k].min!==null||LIMITS[k].max!==null))setCount++; }
-
-  c.appendChild(el("div",{"class":"grid g3"},[
-    kpi("⚑",breaches.length?"bad":"green","تجاوزات قائمة",String(breaches.length),"تجاوز","على آخر قراءة"),
-    kpi("⚙","","مواقع لها حدود",String(setCount)+" / "+SITES.length,"","الباقى بلا حدود مضبوطة"),
-    kpi("◷","","أساس التقييم","آخر قراءة","","من الأرشيف أو البث")
-  ]));
-
-  if(breaches.length){
-    c.appendChild(panel("تنبيهات","تجاوزات على آخر قراءة",[
-      tbl(["الموقع","القراءة (م)","الحد (م)","نوع التجاوز","التوقيت"],breaches.map(function(b){
-        return {flag:true,cells:[b.s.name,fx(b.v,3),fx(b.lim,3),b.kind,dayStr(b.L.di)+" "+b.L.h+":00"]};
-      }))
-    ]));
-  } else {
-    c.appendChild(panel("تنبيهات","تجاوزات على آخر قراءة",[
-      setCount?emptyState("لا توجد تجاوزات","كل المواقع ذات الحدود المضبوطة داخل حدودها فى آخر قراءة.")
-        :emptyState("لم تُضبط حدود بعد","الحدود التشغيلية قرار هندسى — أدخلها بنفسك أدناه لكل موقع، ولن يخترعها التطبيق.")
-    ]));
-  }
-
-  var box=panel("ضبط الحدود","أدخل الحد الأدنى والأقصى لمنسوب الأمام لكل موقع");
-  var rows=[];
-  SITES.forEach(function(s){
-    var lim=LIMITS[s.id]||{};
-    var st=STATS[s.id];
-    var iMin=el("input",{type:"text",inputmode:"decimal",value:(lim.min===null||lim.min===undefined?"":String(lim.min)),
-      style:"max-width:110px;min-height:38px"});
-    var iMax=el("input",{type:"text",inputmode:"decimal",value:(lim.max===null||lim.max===undefined?"":String(lim.max)),
-      style:"max-width:110px;min-height:38px"});
-    function upd(){
-      var mn=iMin.value.trim()===""?null:parseFloat(iMin.value);
-      var mx=iMax.value.trim()===""?null:parseFloat(iMax.value);
-      LIMITS[s.id]={min:(mn!==null&&isNaN(mn))?null:mn,max:(mx!==null&&isNaN(mx))?null:mx};
-    }
-    iMin.onchange=upd; iMax.onchange=upd;
-    rows.push({cells:[s.name,
-      st.min===null?"—":fx(st.min,3), st.max===null?"—":fx(st.max,3),
-      iMin,iMax]});
-  });
-  box.appendChild(tbl(["الموقع","أدنى مرصود (م)","أعلى مرصود (م)","الحد الأدنى","الحد الأقصى"],rows));
-  var bSave=el("button",{"class":"btn solid"},["حفظ الحدود"]);
-  bSave.onclick=function(){ saveLimits(); bSave.textContent="تم الحفظ ✓"; setTimeout(function(){ render(); },700); };
-  var bClear=el("button",{"class":"btn"},["مسح كل الحدود"]);
-  bClear.onclick=function(){ if(confirm("مسح كل الحدود المضبوطة؟")){ LIMITS={}; saveLimits(); render(); } };
-  box.appendChild(el("div",{"class":"actions"},[bSave,bClear]));
-  box.appendChild(el("div",{"class":"note"},["الأعمدة الرمادية هى أدنى وأعلى ما رُصد فعلاً فى الأرشيف — للاسترشاد فقط، وليست حدوداً تشغيلية. الحدود تُحفظ على الجهاز وفى قاعدة البيانات معاً."]));
-  c.appendChild(box);
-}
-
-/* --------- 6) سجل الرايات --------- */
-var FLPAGE=0, FLSITE="", FLKIND="";
-function secFlags(c){
-  var all=[];
-  SITES.forEach(function(s){
-    s.rows.forEach(function(r){
-      var fu=flagOf(r.up), fd=flagOf(r.dn);
-      if(fu)all.push({s:s,r:r,field:"الأمام",v:r.up,k:fu});
-      if(fd)all.push({s:s,r:r,field:"الخلف",v:r.dn,k:fd});
-    });
-  });
-  all.sort(function(a,b){ return (b.r.di-a.r.di)||(b.r.h-a.r.h); });
-  var kinds={};
-  all.forEach(function(x){ kinds[x.k]=(kinds[x.k]||0)+1; });
-
+/* -------- 5) التنزيل -------- */
+function secExport(c){
+  var selP=el("select");
+  selP.appendChild(el("option",{value:"__all__"},["كل النقاط"]));
+  SITES.forEach(function(s){var o=el("option",{value:s.id},[s.name]);
+    if(s.id===SEL.point)o.setAttribute("selected","selected");selP.appendChild(o);});
+  var inF=el("input",{type:"date",value:dayStr(Math.max(0,MAXDI-13)),min:dayStr(0),max:dayStr(MAXDI)});
+  var inT=el("input",{type:"date",value:dayStr(MAXDI),min:dayStr(0),max:dayStr(MAXDI)});
   var selS=el("select");
-  selS.appendChild(el("option",{value:""},["كل المواقع"]));
-  SITES.forEach(function(s){
-    var o=el("option",{value:s.id},[s.name]);
-    if(s.id===FLSITE)o.setAttribute("selected","selected");
-    selS.appendChild(o);
-  });
-  selS.onchange=function(){ FLSITE=selS.value; FLPAGE=0; render(); };
-  var selK=el("select");
-  selK.appendChild(el("option",{value:""},["كل الأنواع"]));
-  Object.keys(kinds).forEach(function(k){
-    var o=el("option",{value:k},[k+" ("+kinds[k]+")"]);
-    if(k===FLKIND)o.setAttribute("selected","selected");
-    selK.appendChild(o);
-  });
-  selK.onchange=function(){ FLKIND=selK.value; FLPAGE=0; render(); };
+  [["h","ساعى"],["d","يومى (متوسط)"]].forEach(function(x){
+    selS.appendChild(el("option",{value:x[0]},[x[1]]));});
 
-  var filt=all.filter(function(x){
-    return (!FLSITE||x.s.id===FLSITE)&&(!FLKIND||x.k===FLKIND);
-  });
-  var PER=100, pages=Math.max(1,Math.ceil(filt.length/PER));
-  if(FLPAGE>=pages)FLPAGE=0;
-  var page=filt.slice(FLPAGE*PER,(FLPAGE+1)*PER);
-
-  c.appendChild(panel("تصفية","اختر الموقع أو نوع الراية",[
-    el("div",{"class":"grid g2",style:"margin-top:12px"},[
-      el("div",{},[el("label",{"class":"fl"},["الموقع"]),selS]),
-      el("div",{},[el("label",{"class":"fl"},["نوع الراية"]),selK])
-    ])
-  ]));
-
-  var p=panel("السجل",filt.length+" خانة معطوبة");
-  if(!page.length){
-    p.appendChild(emptyState("لا توجد نتائج","غيّر التصفية لعرض نتائج أخرى."));
-  } else {
-    p.appendChild(tbl(["التوقيت","الموقع","الخانة","القيمة كما وردت","النوع"],page.map(function(x){
-      return {flag:true,cells:[dayStr(x.r.di)+" "+x.r.h+":00",x.s.name,x.field,fx(x.v,3),x.k]};
-    })));
-    var bar=el("div",{"class":"actions"});
-    var bPrev=el("button",{"class":"btn sm"},["السابق"]);
-    bPrev.onclick=function(){ if(FLPAGE>0){ FLPAGE--; render(); } };
-    var bNext=el("button",{"class":"btn sm"},["التالى"]);
-    bNext.onclick=function(){ if(FLPAGE<pages-1){ FLPAGE++; render(); } };
-    bar.appendChild(bPrev);
-    bar.appendChild(el("span",{style:"font-size:11px;color:var(--muted);align-self:center"},
-      ["صفحة "+(FLPAGE+1)+" من "+pages]));
-    bar.appendChild(bNext);
-    var bCsv=el("button",{"class":"btn sm"},["تصدير CSV"]);
-    bCsv.onclick=function(){ exportCsv(filt); };
-    bar.appendChild(bCsv);
-    p.appendChild(bar);
-  }
-  p.appendChild(el("div",{"class":"note"},["القيم معروضة كما وردت من التليمترى بلا تعديل. الرايات ليست مناسيب — 777 و888 قيم يكتبها النظام عند غياب القراءة."]));
-  c.appendChild(p);
+  var b=el("button",{"class":"btn solid"},["⤓ تنزيل CSV"]);
+  b.onclick=function(){
+    var f=diOf(inF.value),t=diOf(inT.value);
+    if(isNaN(f)||isNaN(t)||f>t){showHint("راجع التاريخين — «من» يجب أن يسبق «إلى» وكلاهما داخل المدى المتاح.");return;}
+    var list=selP.value==="__all__"?SITES:[BYID[selP.value]];
+    var head,rows=[];
+    if(selS.value==="h"){
+      head=["التاريخ","الساعة","الموقع","الترعة","الأمام الخام","الخلف الخام","الأمام المعتمد","الحالة"];
+      list.forEach(function(s){s.rows.forEach(function(r){
+        if(r.di<f||r.di>t)return;
+        var fl=flagOf(r.up)||flagOf(r.dn);
+        rows.push([dayStr(r.di),r.h,s.name,s.canal,
+          r.up===null?"":r.up,r.dn===null?"":r.dn,
+          (r.up!==null&&!isBad(r.up))?r.up:"",
+          fl||(r.up===0?"صفر":"سليم")]);});});
+    }else{
+      head=["التاريخ","الموقع","الترعة","متوسط الأمام","عدد القراءات المعتمدة"];
+      list.forEach(function(s){daily(s,f,t).forEach(function(p){
+        rows.push([dayStr(p.di),s.name,s.canal,p.v.toFixed(3),p.n]);});});
+    }
+    csv("بيانات_التليمترى",head,rows);
+  };
+  c.appendChild(panel("تنزيل البيانات التاريخية","اختر النقطة والفترة والخطوة الزمنية",
+    "المدى المتاح: "+dayStr(0)+" ← "+dayStr(MAXDI),[
+    el("div",{"class":"grid g4",style:"margin-top:12px"},[
+      el("div",{},[el("label",{"class":"fl"},["النقطة"]),selP]),
+      el("div",{},[el("label",{"class":"fl"},["من"]),inF]),
+      el("div",{},[el("label",{"class":"fl"},["إلى"]),inT]),
+      el("div",{},[el("label",{"class":"fl"},["الخطوة الزمنية"]),selS])]),
+    el("div",{"class":"actions"},[b]),
+    el("div",{"class":"note"},["الملف يحوى العمود الخام كما ورد والعمود المعتمد بعد إسقاط الرايات، وعمود الحالة يبيّن سبب الإسقاط — فلا تختفى قراءة بلا أثر."])]));
 }
-function exportCsv(list){
-  var out="\uFEFF" + ["التوقيت","الموقع","الإدارة","الخانة","القيمة","النوع"].join(",") + "\n";
-  list.forEach(function(x){
-    out += [dayStr(x.r.di)+" "+x.r.h+":00", x.s.name, DIRNAME[x.s.dir], x.field, x.v, x.k].join(",") + "\n";
-  });
+function csv(name,head,rows){
+  var out="\uFEFF"+head.join(",")+"\n";
+  rows.forEach(function(r){out+=r.map(function(x){
+    var s=String(x===null||x===undefined?"":x);
+    return /[",\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s;}).join(",")+"\n";});
   var a=document.createElement("a");
   a.href=URL.createObjectURL(new Blob([out],{type:"text/csv;charset=utf-8"}));
-  a.download="سجل_الرايات.csv";
-  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  a.download=name+".csv";document.body.appendChild(a);a.click();document.body.removeChild(a);
 }
 
-/* ---------------- التصيير ---------------- */
+/* -------- 6) جودة المصدر -------- */
+function secQuality(c){
+  var rows=[];
+  SITES.forEach(function(s){
+    var st=STATS[s.id],pct=Math.round(st.health*100);
+    rows.push({bad:pct<90,cells:[s.name,s.canal,st.n,
+      st.flags["راية 777"]||0,st.flags["راية 888"]||0,
+      st.flags["قيمة افتراضية 5.00"]||0,st.flags["قيمة سالبة"]||0,st.zero,pct+"٪"]});});
+  c.appendChild(panel("سلامة كل موقع","نسبة القراءات السليمة وعدّاد كل نوع عطل",null,[
+    tbl(["الموقع","الترعة","القراءات","777","888","5.00","سالبة","صفرية","السلامة"],rows)]));
+
+  var burst={};
+  SITES.forEach(function(s){s.rows.forEach(function(r){
+    if(r.up===FAULT||r.dn===FAULT){var k=r.di+"."+r.h;burst[k]=(burst[k]||0)+1;}});});
+  var bl=[];
+  Object.keys(burst).forEach(function(k){if(burst[k]<3)return;
+    var p=k.split(".");bl.push({di:parseInt(p[0],10),h:parseInt(p[1],10),n:burst[k]});});
+  bl.sort(function(a,b){return (b.di-a.di)||(b.h-a.h);});
+  c.appendChild(panel("العطل المنظومى","لحظات كتب فيها النظام قيمة واحدة فى مواقع متعددة",null,[
+    bl.length?tbl(["التوقيت","عدد المواقع","القيمة","التشخيص"],bl.map(function(f){
+      return {bad:true,cells:[dayStr(f.di)+" "+f.h+":00",f.n+" موقعاً","5.00","عطل تسجيل لا منسوب"]};}))
+      :emptyState("لا توجد لحظات عطل منظومى",""),
+    el("div",{"class":"note"},["تطابق عدة محطات على الرقم نفسه فى اللحظة نفسها لا يحدث هيدروليكياً — الأرجح قيمة افتراضية يكتبها النظام عند انقطاع الاتصال."])]));
+
+  var cov=el("div",{style:"display:grid;gap:2px;overflow:auto"});
+  SITES.forEach(function(s){
+    var cnt={};s.rows.forEach(function(r){cnt[r.di]=(cnt[r.di]||0)+1;});
+    var row=el("div",{style:"display:flex;gap:2px;align-items:center"},[
+      el("span",{style:"width:104px;flex:0 0 104px;font-size:9px;color:var(--muted);overflow:hidden;white-space:nowrap;text-overflow:ellipsis",title:s.name},[s.name])]);
+    for(var d=0;d<=MAXDI;d++){
+      var n=cnt[d]||0;
+      var col=n===0?"#efeadd":(n>=24?"#4d7c5a":(n>=12?"#c58a2f":(n>1?"#d9a441":"#b46f4b")));
+      row.appendChild(el("i",{style:"width:11px;height:11px;border-radius:2px;display:block;background:"+col,
+        title:s.name+" — "+dayStr(d)+" — "+n+" قراءة"}));}
+    cov.appendChild(row);});
+  c.appendChild(panel("التغطية اليومية","عدد القراءات لكل موقع فى كل يوم",null,[
+    cov,
+    el("div",{"class":"legend"},[
+      el("span",{html:'<i style="background:#4d7c5a"></i>٢٤ قراءة'}),
+      el("span",{html:'<i style="background:#c58a2f"></i>١٢ فأكثر'}),
+      el("span",{html:'<i style="background:#b46f4b"></i>قراءة واحدة (تسجيل يومى)'}),
+      el("span",{html:'<i style="background:#efeadd"></i>لا قراءة'})]),
+    el("div",{"class":"note"},["التسجيل قبل ١٥ يوليو ٢٠٢٦ كان قراءة واحدة يومياً الساعة ٢٣:٠٠ — لذلك يظهر الجانب الأيسر بلون واحد. أى متوسط يخلط الفترتين مضلِّل."])]));
+}
+
+/* ============ التصيير ============ */
 function render(){
-  var c=q("content"); c.innerHTML="";
+  var c=q("content");c.innerHTML="";
   c.appendChild(mobileNav());
-  if(CUR==="command")secCommand(c);
-  else if(CUR==="quality")secQuality(c);
-  else if(CUR==="trends")secTrends(c);
-  else if(CUR==="pumps")secPumps(c);
+  if(CUR==="canal")secCanal(c);
+  else if(CUR==="point")secPoint(c);
   else if(CUR==="alerts")secAlerts(c);
-  else if(CUR==="flags")secFlags(c);
-  c.appendChild(el("div",{"class":"note",style:"text-align:center;margin-top:20px;padding-bottom:20px"},
-    ["مِرصد التليمترى — بيلد "+BUILD+" · المصدر: تطبيق التليمترى الرسمى للإدارة المركزية للرصد المائى والتليمترى · الأرشيف المضمّن "+dayStr(0)+" ← "+dayStr(MAXDI)]));
+  else if(CUR==="pumps")secPumps(c);
+  else if(CUR==="export")secExport(c);
+  else if(CUR==="quality")secQuality(c);
+  c.appendChild(el("div",{"class":"note",style:"text-align:center;margin-top:22px"},
+    ["مِرصد التليمترى — بيلد "+BUILD+" · المصدر: الإدارة المركزية للرصد المائى والتليمترى · الأرشيف المضمّن "+
+     dayStr(0)+" ← "+dayStr(MAXDI)]));
 }
 
-/* ---------------- تثبيت التطبيق ---------------- */
+/* ============ التثبيت ============ */
 var deferredPrompt=null;
-function showHint(txt){
-  var old=q("hintbar"); if(old&&old.parentNode)old.parentNode.removeChild(old);
+function showHint(t){
+  var o=q("hintbar");if(o&&o.parentNode)o.parentNode.removeChild(o);
   var bar=el("div",{id:"hintbar",style:"position:fixed;inset-inline:12px;bottom:14px;z-index:99;"+
     "background:#155b75;color:#fff;border-radius:12px;padding:14px 16px;font-size:12.5px;"+
-    "box-shadow:0 10px 30px #4d432c33;display:flex;gap:12px;align-items:center"},[txt]);
+    "box-shadow:0 10px 30px #4d432c33;display:flex;gap:12px;align-items:center"},[t]);
   var x=el("button",{"class":"btn sm",style:"margin-inline-start:auto;background:#ffffff22;border:0;color:#fff"},["إغلاق"]);
-  x.onclick=function(){ if(bar.parentNode)bar.parentNode.removeChild(bar); };
-  bar.appendChild(x);
-  document.body.appendChild(bar);
-}
-function isStandalone(){
-  return (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches)
-      || window.navigator.standalone===true;
+  x.onclick=function(){if(bar.parentNode)bar.parentNode.removeChild(bar);};
+  bar.appendChild(x);document.body.appendChild(bar);
 }
 function setupInstall(){
-  var b=q("btn-install");
-  if(!b)return;
-  if(isStandalone())return;
+  var b=q("btn-install");if(!b)return;
+  if((window.matchMedia&&window.matchMedia("(display-mode: standalone)").matches)||
+     window.navigator.standalone===true)return;
   window.addEventListener("beforeinstallprompt",function(e){
-    e.preventDefault(); deferredPrompt=e; b.style.display="inline-flex";
-  });
-  window.addEventListener("appinstalled",function(){
-    deferredPrompt=null; b.style.display="none";
-  });
+    e.preventDefault();deferredPrompt=e;b.style.display="inline-flex";});
+  window.addEventListener("appinstalled",function(){deferredPrompt=null;b.style.display="none";});
   b.onclick=function(){
-    if(deferredPrompt){
-      deferredPrompt.prompt();
-      deferredPrompt.userChoice.then(function(){ deferredPrompt=null; b.style.display="none"; });
-    } else {
-      showHint("لتثبيت التطبيق: افتح قائمة المتصفح ثم اختر «إضافة إلى الشاشة الرئيسية».");
-    }
-  };
-  /* على iOS لا يوجد beforeinstallprompt — أظهر الزر بإرشاد يدوى */
-  var ua=navigator.userAgent||"";
-  if(/iPhone|iPad|iPod/.test(ua))b.style.display="inline-flex";
+    if(deferredPrompt){deferredPrompt.prompt();
+      deferredPrompt.userChoice.then(function(){deferredPrompt=null;b.style.display="none";});}
+    else showHint("لتثبيت التطبيق: افتح قائمة المتصفح ثم اختر «إضافة إلى الشاشة الرئيسية».");};
+  if(/iPhone|iPad|iPod/.test(navigator.userAgent||""))b.style.display="inline-flex";
 }
 
-/* ---------------- الإقلاع ---------------- */
+/* ============ الإقلاع ============ */
 function boot(){
   q("verlbl").textContent="build "+BUILD;
-  loadArchive();
-  computeStats();
-  loadLimits();
-  buildNav();
-  selectSection("command");
-  loadLive().then(function(){ render();
-    fbPatch("registry/"+APPID,{app:APPID,name:"مِرصد التليمترى",type:"dashboard",version:BUILD,lastSeen:Date.now()});
-  });
-  q("btn-refresh").onclick=function(){ loadLive().then(render); };
+  loadArchive();computeStats();loadUser();buildNav();go("canal");
+  loadLive().then(function(){render();
+    fbPatch("registry/"+APPID,{app:APPID,name:"مِرصد التليمترى",type:"dashboard",
+      version:BUILD,lastSeen:Date.now()});});
+  q("btn-refresh").onclick=function(){loadLive().then(render);};
+  q("btn-print").onclick=function(){window.print();};
   setupInstall();
-  q("btn-print").onclick=function(){ window.print(); };
-  if("serviceWorker" in navigator){
-    navigator.serviceWorker.register("sw.js").catch(function(){});
-  }
+  if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(function(){});
 }
 boot();
 </script>
